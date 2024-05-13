@@ -1,4 +1,3 @@
-import {useState, useEffect} from "react";
 import {Modal, ModalContent, ModalFooter, ModalHeader, ModalBody , Button} from "@nextui-org/react";
 //-----------------------------------------------------------------------------------------------------------
 
@@ -32,7 +31,7 @@ export default function EventSignDialog({isOpen, onOpenChange, closeEvent, getEv
              <ModalHeader className="flex flex-col gap-1">TTE Kegiatan</ModalHeader>
               <ModalBody>
                 <p className='text-slate-500 -mt-5'> 
-                  Yakin TTE kegiatan? absensi akan tidak dapat dilakukan lagi pada kegiatan ini
+                  Yakin TTE kegiatan? absensi tidak dapat dilakukan lagi setelah TTE
                 </p>
               </ModalBody>
 

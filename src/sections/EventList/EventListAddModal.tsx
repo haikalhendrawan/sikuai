@@ -1,9 +1,7 @@
 import {useState} from "react";
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, DateValue,  
-        Button, Input, DatePicker, Textarea, Select, SelectItem} from "@nextui-org/react";
+        Button, DatePicker, Textarea, Select, SelectItem} from "@nextui-org/react";
 import {parseDate} from "@internationalized/date";
-import axiosAuth from "../../config/axios";
-import Iconify from "../../components/Iconify";
 import { ValueType, AddEventType } from "./types";
 //-----------------------------------------------------------------------------------------------------------
 const SELECT_UNIT = [
@@ -68,7 +66,7 @@ export default function EventListAddModal({isOpen, onOpenChange, addEvent}: Even
          className="p-4"
       >
         <ModalContent>
-          {(onClose) => (
+          {() => (
             <>
               <ModalHeader className="flex flex-col gap-2">Buat Absensi</ModalHeader>
               <ModalBody>

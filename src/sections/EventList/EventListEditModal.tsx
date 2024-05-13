@@ -1,6 +1,6 @@
 import {useState, useEffect} from "react";
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, DateValue,  
-        Button, Input, DatePicker, Textarea, Select, SelectItem} from "@nextui-org/react";
+        Button, DatePicker, Textarea, Select, SelectItem} from "@nextui-org/react";
 import {parseDate} from "@internationalized/date";
 import {EventTableType, EditValueType, EditEventType} from "./types";
 import { parseTimeZone } from "./utils";
@@ -86,7 +86,7 @@ export default function EventListEditModal({editEvent, selectedId, events, isOpe
          className="p-4"
       >
         <ModalContent>
-          {(onClose) => (
+          {() => (
             <>
               <ModalHeader className="flex flex-col gap-2">Edit Detail Kegiatan</ModalHeader>
               <ModalBody>

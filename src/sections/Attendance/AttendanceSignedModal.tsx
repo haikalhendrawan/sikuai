@@ -1,6 +1,4 @@
-import {useState, useEffect} from "react";
-import {Modal, ModalContent, Spinner, ModalBody} from "@nextui-org/react";
-import { AttendanceEventBody } from "./types";
+import {Modal, ModalContent, ModalBody} from "@nextui-org/react";
 //-----------------------------------------------------------------------------------------------------------
 
 interface AttendanceSignedModalProps {
@@ -20,7 +18,7 @@ export default function AttendanceSignedModal({fileName, isOpen, onOpenChange}: 
         className="p-4"
       >
         <ModalContent>
-          {(onClose) => (
+          {() => (
             <>
               <ModalBody>
                 <div style={{width: '100%', height: '90vh'}}>

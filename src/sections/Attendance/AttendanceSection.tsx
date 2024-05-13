@@ -17,7 +17,7 @@ export default function AttendanceSection(){
   
   async function addAttendance(body: AddAttendanceBody) {
     try{
-      const response = await axiosAuth.post(`/addAttendance`, body);
+      await axiosAuth.post(`/addAttendance`, body);
       setSection(1);
     }catch(err){
       throw err

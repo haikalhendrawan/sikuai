@@ -1,11 +1,10 @@
 import {useMemo, useCallback, useState, Key } from "react";
 import {Table, TableHeader, TableColumn, TableBody, TableRow, 
-        TableCell, Pagination, Tooltip, Button, Chip, useDisclosure} from "@nextui-org/react";
+        TableCell, Pagination, Tooltip, Button, Chip} from "@nextui-org/react";
 import EventListTableHeader from "./EventListTableHeader";
 import Iconify from "../../components/Iconify";
 import {EventTableType} from "./types";
 import {SELECT_UNIT} from "./utils";
-import EventTableDialog from "./EventTableDialog";
 //-----------------------------------------------------------------------------------------------------------
 interface EventListTableProps {
   events: EventTableType[];
@@ -24,9 +23,6 @@ interface EventListTableProps {
 //-----------------------------------------------------------------------------------------------------------
 export default function EventListTable({
   events, 
-  getEvents, 
-  deleteEvent,
-  closeEvent, 
   onOpenAdd, 
   onOpenEdit,
   onOpenFile,
@@ -39,8 +35,6 @@ export default function EventListTable({
   const [page, setPage] = useState(1);
 
   const [filterValue, setFilterValue] = useState<string>("");
-
-  const hasSearchFilter = Boolean(filterValue);
 
   const onSearchChange = useCallback((value?: string) => {
     if (value) {
@@ -92,7 +86,7 @@ export default function EventListTable({
     const end = start + rowsPerPage;
 
     return filteredEvent.slice(start, end);
-  }, [page, events]);
+  }, [page, filteredEvent]);
 
   const renderCell = useCallback((events: EventTableType, columnKey: Key) => {
     const cellValue = events[columnKey as keyof EventTableType];

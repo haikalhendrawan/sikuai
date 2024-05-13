@@ -46,7 +46,7 @@ export default function AttendancePreviewModal({editId, isOpen, onOpenChange}: A
         className="p-4"
       >
         <ModalContent>
-          {(onClose) => (
+          {() => (
             <>
               <ModalBody>
                 {isLoading?<Spinner />:<AttendanceReport attendance={attendance}/>}

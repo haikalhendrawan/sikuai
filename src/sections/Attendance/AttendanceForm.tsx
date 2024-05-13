@@ -1,7 +1,5 @@
-import {useState, useEffect} from "react";
+import {useState} from "react";
 import {Input, Button, Select, SelectItem} from "@nextui-org/react";
-import axiosAuth from "../../config/axios";
-import Iconify from "../../components/Iconify";
 import { AddAttendanceBody, AttendanceFormTypes, AddAttendanceError,
   nameSchema, emailSchema, identifierSchema, unitSchema, idSchema} from "./types";
 //-----------------------------------------------------------------------------------------------------------

@@ -1,4 +1,3 @@
-import {useState, useEffect} from "react";
 import {Modal, ModalContent, ModalFooter, ModalHeader, ModalBody , Button} from "@nextui-org/react";
 //-----------------------------------------------------------------------------------------------------------
 

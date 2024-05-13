@@ -1,7 +1,5 @@
-import {useState, useEffect} from "react";
-import { Document, Page, Text, View, Image, StyleSheet, PDFViewer } from '@react-pdf/renderer';
+import { Document, Page, Text, View, Image, PDFViewer } from '@react-pdf/renderer';
 import styles from "./styles";
-import axiosAuth from "../../config/axios";
 import { AttendanceEventBody } from "./types";
 
 // ----------------------------------------------------------------
@@ -17,7 +15,6 @@ export default function AttendanceReport({attendance}: AttendanceReportProps) {
   const hour = currentDate.getHours();
   const minute = currentDate.getMinutes();
   let second = currentDate.getSeconds();
-  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
   const PDF_TITLE = attendance?.[0]?.title || '';
   const PDF_TITLE_DATE = new Date(attendance?.[0]?.date)?.toLocaleDateString('id-ID', {

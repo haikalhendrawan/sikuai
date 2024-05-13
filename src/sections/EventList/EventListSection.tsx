@@ -46,7 +46,7 @@ export default function EventListSection(){
 
   async function addEvent(body: AddEventType){
     try{
-      const response = await axiosAuth.post(`/addEvent`, body);
+      await axiosAuth.post(`/addEvent`, body);
       getEvents();
     }catch(err: any){
       throw err
@@ -55,7 +55,7 @@ export default function EventListSection(){
 
   async function editEvent(body: EditEventType){
     try{
-      const response = await axiosAuth.post(`/editEvent`, body);
+      await axiosAuth.post(`/editEvent`, body);
       getEvents();
     }catch(err: any){
       throw err
@@ -64,7 +64,7 @@ export default function EventListSection(){
 
   async function deleteEvent(id: string){
     try{
-      const response = await axiosAuth.post(`/deleteEvent`, {id: id});
+      await axiosAuth.post(`/deleteEvent`, {id: id});
     }catch(err: any){
       throw err
     }

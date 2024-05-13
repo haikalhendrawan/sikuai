@@ -1,4 +1,3 @@
-import { z } from 'zod';
 import { nameSchema, emailSchema, identifierSchema, unitSchema, idSchema } from './types';
 import {AddAttendanceBody} from './types';
 

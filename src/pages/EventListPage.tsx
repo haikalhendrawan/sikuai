@@ -6,7 +6,7 @@ export default function EventListPage() {
   return (
     <>
       <Helmet>
-        <title>EventListPage</title>
+        <title>Event List </title>
       </Helmet>
 
       <div className="flex flex-col items-center justify-center h-screen bg-[url('/tail-gradient.png')] bg-no-repeat bg-cover" >
