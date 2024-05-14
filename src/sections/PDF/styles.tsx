@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     header:{
       marginBottom:10,
       width:'auto',
-      height:70,
+      minHeight:70,
       borderBottomWidth:1,
       flexDirection:'row',
       justifyContent:'center',

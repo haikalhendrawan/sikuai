@@ -135,18 +135,6 @@ export default function AttendanceForm({todayEvents, addAttendance}: AttendanceF
         />
 
         <Input
-          name='identifier'
-          label="NIP"
-          labelPlacement="outside"
-          placeholder="Masukan NIP anda"
-          description="Silahkan masukan nomor NIK apabila bukan berasal dari pemerintahan"
-          variant="bordered"
-          className="max-w-xl px-2"
-          value={value.identifier}
-          onChange={handleChange}
-        />
-
-        <Input
           name='unit'
           label="Unit"
           labelPlacement="outside"
@@ -156,6 +144,20 @@ export default function AttendanceForm({todayEvents, addAttendance}: AttendanceF
           value={value.unit}
           onChange={handleChange}
         />
+
+        <Input
+          name='identifier'
+          label="NIP"
+          labelPlacement="outside"
+          placeholder="Masukan NIP anda"
+          description="Silahkan dikosongkan apabila anda bukan ASN"
+          variant="bordered"
+          className="max-w-xl px-2"
+          value={value.identifier}
+          onChange={handleChange}
+        />
+
+        
 
         <Button onClick={handleSubmit}> Submit </Button>
       </div>

@@ -149,7 +149,7 @@ export default function EventListTable({
                   aria-label="Preview"
                   style={events.status===1 ? {display:'block'} : {}} 
                 >
-                  <Iconify icon={"eva:printer-fill"}/>
+                  <Iconify icon={"eva:eye-fill"}/>
                 </Button>    
               </Tooltip>
             </a>
