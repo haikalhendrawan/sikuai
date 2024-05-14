@@ -1,5 +1,5 @@
 import {useState, useEffect} from "react";
-import {Modal, ModalContent, Spinner, ModalBody} from "@nextui-org/react";
+import {Modal, ModalContent,  ModalBody, Spinner} from "@nextui-org/react";
 import AttendanceReport from "../PDF/AttendanceReport";
 import axiosAuth from "../../config/axios";
 import { AttendanceEventBody } from "./types";
@@ -16,9 +16,10 @@ export default function AttendancePreviewModal({editId, isOpen, onOpenChange}: A
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   async function getData(){
+    const now = new Date().getTime();
     try{
       setIsLoading(true);
-      const response = await axiosAuth.post("/getAttendanceByEvent", {eventId: editId});
+      const response = await axiosAuth.post("/getAttendanceByEvent?now=" + now , {eventId: editId});
       setAttendance(response.data.rows);
       setIsLoading(false);
     }catch(err){
@@ -30,11 +31,8 @@ export default function AttendancePreviewModal({editId, isOpen, onOpenChange}: A
   };
 
   useEffect(() => {
-    if(editId){
-      getData();
-    }
-
-  },[editId])
+    getData();
+  },[editId, isOpen])
   
   return (
     <>

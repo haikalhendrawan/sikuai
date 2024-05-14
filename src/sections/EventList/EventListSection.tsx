@@ -32,7 +32,8 @@ export default function EventListSection(){
 
   async function getEvents() {
     try{
-      const response = await axiosAuth.get("/getAllEvent");
+      const now = new Date().getTime();
+      const response = await axiosAuth.get("/getAllEvent?now=" + now);
       const mapped = response.data.rows.map((event: EventType, index: number) => ({
         key: index+1,
         ...event,

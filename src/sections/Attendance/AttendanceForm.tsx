@@ -85,7 +85,7 @@ export default function AttendanceForm({todayEvents, addAttendance}: AttendanceF
           label="Acara"
           variant="bordered"
           isRequired  
-          className="max-w-xl"
+          className="max-w-xl px-2"
           labelPlacement="outside"
           placeholder="Pilih kegiatan yang anda hadiri"
           isInvalid={error.id}
@@ -110,7 +110,7 @@ export default function AttendanceForm({todayEvents, addAttendance}: AttendanceF
           size="md"
           isRequired  
           variant="bordered"
-          className="max-w-xl"
+          className="max-w-xl px-2"
           value={value.name}
           isInvalid={error.name}
           errorMessage={errorMessage.name}
@@ -129,7 +129,7 @@ export default function AttendanceForm({todayEvents, addAttendance}: AttendanceF
           errorMessage={errorMessage.email}
           isInvalid={error.email}
           variant="bordered"
-          className="max-w-xl"
+          className="max-w-xl px-2"
           value={value.email}
           onChange={handleChange}
         />
@@ -141,7 +141,7 @@ export default function AttendanceForm({todayEvents, addAttendance}: AttendanceF
           placeholder="Masukan NIP anda"
           description="Silahkan masukan nomor NIK apabila bukan berasal dari pemerintahan"
           variant="bordered"
-          className="max-w-xl"
+          className="max-w-xl px-2"
           value={value.identifier}
           onChange={handleChange}
         />
@@ -152,7 +152,7 @@ export default function AttendanceForm({todayEvents, addAttendance}: AttendanceF
           labelPlacement="outside"
           placeholder="Nama instansi tempat anda bekerja/usaha"
           variant="bordered"
-          className="max-w-xl"
+          className="max-w-xl px-2"
           value={value.unit}
           onChange={handleChange}
         />

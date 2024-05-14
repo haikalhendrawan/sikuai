@@ -1,9 +1,7 @@
-import { Helmet } from "react-helmet-async";
+import { Helmet} from "react-helmet-async";
 import AttendanceSection from "../sections/Attendance/AttendanceSection";
 
-
-
-export default function AttendancePage() {
+export default function AttFormPage() {
   return (
     <>
       <Helmet>

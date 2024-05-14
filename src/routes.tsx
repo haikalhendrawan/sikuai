@@ -1,6 +1,7 @@
 import {Routes, Route} from "react-router-dom";
 import EventListPage from "./pages/EventListPage";
-import AttendancePage from "./pages/AttendancePage";
+import AttFormPage from "./pages/AttFormPage";
+import AttPreviewPage from "./pages/AttPreviewPage";
 import HomePage from "./pages/HomePage";
 
 
@@ -9,8 +10,11 @@ export default function Router(){
     <Routes>
       <Route path="/">
         <Route index element={<HomePage/>}/>
-        <Route path="/attForm" element={<AttendancePage/>} />
-        <Route path="/events" element={<EventListPage />} />
+        <Route path="attForm" element={<AttFormPage/>} />
+        <Route path="events" element={<EventListPage />} />
+        <Route path="preview">
+          <Route path=":id" element={<AttPreviewPage />} />
+        </Route>
       </Route>
     </Routes>
   )

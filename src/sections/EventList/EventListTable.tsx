@@ -13,24 +13,21 @@ interface EventListTableProps {
   closeEvent: (id: string) => Promise<void>,
   onOpenAdd: () => void,
   onOpenEdit: () => void,
-  onOpenFile: () => void,
-  onOpenSignedFile: () => void,
+  onOpenFile?: () => void,
+  onOpenSignedFile?: () => void,
   onOpenDeleteDialog: () => void,
   onOpenSignDialog: () => void,
   setSelectedId: React.Dispatch<React.SetStateAction<string>>,
-  getSignedFile: (fileName: string) => Promise<void>,
+  getSignedFile?: (fileName: string) => Promise<void>,
 }
 //-----------------------------------------------------------------------------------------------------------
 export default function EventListTable({
   events, 
   onOpenAdd, 
   onOpenEdit,
-  onOpenFile,
-  onOpenSignedFile,
   onOpenDeleteDialog,
   onOpenSignDialog,
-  setSelectedId,
-  getSignedFile}: EventListTableProps) {
+  setSelectedId}: EventListTableProps) {
 
   const [page, setPage] = useState(1);
 
@@ -57,15 +54,15 @@ export default function EventListTable({
     setSelectedId(id);
   };
 
-  const handleOpenFileModal = (id: string) => {
-    onOpenFile();
-    setSelectedId(id);
-  };
+  // const handleOpenFileModal = (id: string) => {
+  //   onOpenFile();
+  //   setSelectedId(id);
+  // };
 
-  const handleOpenSignedFileModal = (fileName: string) => {
-    onOpenSignedFile();
-    getSignedFile(fileName)
-  };
+  // const handleOpenSignedFileModal = (fileName: string) => {
+  //   onOpenSignedFile();
+  //   getSignedFile(fileName)
+  // };
 
   const handleOpenDeleteDialog = (id: string) => {
     onOpenDeleteDialog();
@@ -139,18 +136,23 @@ export default function EventListTable({
                 <Iconify icon={"eva:edit-fill"}/>
               </Button>    
             </Tooltip>
-            <Tooltip content="Preview">
-              <Button 
-                isIconOnly 
-                variant='light' 
-                color="default" 
-                aria-label="Preview"
-                style={events.status===1 ? {display:'none'} : {}}
-                onClick={() => handleOpenFileModal(events.id)} 
-              >
-                <Iconify icon={"eva:eye-fill"}/>
-              </Button>    
-            </Tooltip>
+            <a 
+              href={`/preview/${events.id}`} 
+              target="blank" 
+              style={{display: events.status===1 ? 'none' : 'block'}}
+            >
+              <Tooltip content="Preview">
+                <Button 
+                  isIconOnly 
+                  variant='light' 
+                  color="default" 
+                  aria-label="Preview"
+                  style={events.status===1 ? {display:'block'} : {}} 
+                >
+                  <Iconify icon={"eva:printer-fill"}/>
+                </Button>    
+              </Tooltip>
+            </a>
             <Tooltip content="TTE">
               <Button 
                 isIconOnly
@@ -163,19 +165,23 @@ export default function EventListTable({
                 <Iconify icon={"clarity:qr-code-line"}/>
               </Button>    
             </Tooltip>
-            <Tooltip content="Print">
-              <Button 
-                isIconOnly
-                style={events.status===0 ? {display:'none'} : {}} 
-                variant='light' 
-                color="success" 
-                aria-label="TTE"
-                onClick={() => handleOpenSignedFileModal(events.file)}
-                // target="_blank"
-              > 
-                <Iconify icon={"eva:printer-fill"}/>
-              </Button>    
-            </Tooltip>
+            <a 
+              href={`${import.meta.env.VITE_API_URL}/attendance/${events.file}`} 
+              target="blank" 
+              style={{display: events.status===0 ? 'none' : 'block'}}
+            >
+              <Tooltip content="Print">
+                <Button 
+                  isIconOnly
+                  style={events.status===0 ? {display:'none'} : {}} 
+                  variant='light' 
+                  color="success" 
+                  aria-label="Print"
+                >
+                  <Iconify icon={"eva:printer-fill"}/>
+                </Button>
+              </Tooltip>
+            </a>
             <Tooltip content="Delete">
                <Button
                 isDisabled={events.status===1} 
@@ -236,11 +242,6 @@ export default function EventListTable({
                 {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
               </TableRow>
             ))}
-            {/* {(item) => (
-              <TableRow key={item.key}>
-                {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
-              </TableRow>
-            )} */}
           </TableBody>
         </Table>
     </>
