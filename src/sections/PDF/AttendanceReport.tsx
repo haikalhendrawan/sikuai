@@ -28,16 +28,12 @@ export default function AttendanceReport({attendance}: AttendanceReportProps) {
       <Document>
         <Page size="A4" style={styles.page} orientation="portrait">
           <View style={styles.header} fixed>
-              <View style={{flexDirection:'column', justifyContent:'center', alignItems:'center', paddingTop:15, paddingBottom:15, paddingRight:65, paddingLeft:65}} wrap={false}>
-                  <Text style={{fontFamily: 'Helvetica-Bold', textAlign:'center', fontSize: 14, marginBottom:3}}> Daftar Hadir</Text>
-                  <Text style={{fontFamily: 'Helvetica-Bold', textAlign:'center', fontSize: 14, marginBottom:3}}> {PDF_TITLE} </Text>
-                  <Text style={{fontSize: 12, textAlign:'center',marginBottom:3}}> {PDF_TITLE_DATE || 'Belum ada absen'} </Text>
+              <View style={{flexDirection:'column', justifyContent:'center', alignItems:'center', paddingTop:15, paddingBottom:15, paddingRight:70, paddingLeft:70}} wrap={false}>
+                <Text style={{fontFamily: 'Helvetica-Bold', textAlign:'center', fontSize: 14, marginBottom:3}}> Daftar Hadir</Text>
+                <Text style={{fontFamily: 'Helvetica-Bold', textAlign:'center', fontSize: 14, marginBottom:3}}> {PDF_TITLE} </Text>
+                <Text style={{fontSize: 12, textAlign:'center',marginBottom:3}}> {PDF_TITLE_DATE || 'Belum ada absen'} </Text>
               </View>
-              <Image style={{position: 'absolute', 
-        right: 0, 
-        alignSelf: 'center', 
-        width: 65, 
-        height: 65}} src={"/qr-unsigned.png"}/>
+              <Image style={{position: 'absolute', right: 0, alignSelf: 'center', width: 65, height: 65}} src={"/qr-unsigned.png"}/>
           </View>
 
 

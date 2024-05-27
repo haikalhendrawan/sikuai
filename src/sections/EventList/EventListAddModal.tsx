@@ -19,6 +19,8 @@ interface EventListAddModalProps {
 };
 //-----------------------------------------------------------------------------------------------------------
 export default function EventListAddModal({isOpen, onOpenChange, addEvent}: EventListAddModalProps) {
+  const [callingAPI, setCallingAPI] = useState(false);
+
   const [value, setValue] = useState<ValueType>({
     title: "", 
     date: parseDate(new Date().toISOString().split('T')[0]), 
@@ -40,11 +42,14 @@ export default function EventListAddModal({isOpen, onOpenChange, addEvent}: Even
       uic: value.uic
     };
     try{
+      setCallingAPI(true);
       await addEvent(body);
       onOpenChange();
       handleReset();
+      setCallingAPI(false);
     }catch(err){
       console.log(err);
+      setCallingAPI(false);
     }
   };
 
@@ -107,10 +112,10 @@ export default function EventListAddModal({isOpen, onOpenChange, addEvent}: Even
                 
               </ModalBody>
               <ModalFooter className="mr-4">
-                <Button className='bg-black text-white' onClick={handleSubmit}>
+                <Button className='bg-black text-white' onClick={handleSubmit} isDisabled={callingAPI}>
                   Add
                 </Button>
-                <Button color="default" onClick={handleReset}>
+                <Button color="default" onClick={handleReset} isDisabled={callingAPI}>
                   Reset
                 </Button>
               </ModalFooter>

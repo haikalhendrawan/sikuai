@@ -1,3 +1,4 @@
+import {useState} from "react";
 import {Modal, ModalContent, ModalFooter, ModalHeader, ModalBody , Button} from "@nextui-org/react";
 //-----------------------------------------------------------------------------------------------------------
 
@@ -10,10 +11,18 @@ interface EventTableDialogProps {
 };
 //-----------------------------------------------------------------------------------------------------------
 export default function EventTableDialog({isOpen, onOpenChange, deleteEvent, getEvents, selectedId}: EventTableDialogProps) {
+  const [callingAPI, setCallingAPI] = useState(false);
+
   const handleDelete = async (id: string) => {
-    await deleteEvent(id);
-    await getEvents();
-    onOpenChange();
+    try{
+      setCallingAPI(true);
+      await deleteEvent(id);
+      await getEvents();
+      onOpenChange();
+      setCallingAPI(false);
+    }catch(err){
+      setCallingAPI(false);
+    }
   };
 
   return (
@@ -36,10 +45,10 @@ export default function EventTableDialog({isOpen, onOpenChange, deleteEvent, get
               </ModalBody>
 
               <ModalFooter className='mt-5'>
-                <Button color="danger"  onClick={() => handleDelete(selectedId)}>
+                <Button color="danger"  onClick={() => handleDelete(selectedId)} isDisabled={callingAPI}>
                   Delete
                 </Button>
-                <Button color="default" onPress={onClose}>
+                <Button color="default" onPress={onClose} isDisabled={callingAPI}>
                   Cancel
                 </Button>
               </ModalFooter>
