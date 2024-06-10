@@ -147,7 +147,7 @@ export default function AttendanceForm({todayEvents, addAttendance}: AttendanceF
 
         <Input
           name='identifier'
-          label="NIP"
+          label="Nomor Identitas Pegawai (NIP)"
           labelPlacement="outside"
           placeholder="Masukan NIP anda"
           description="Silahkan dikosongkan apabila anda bukan ASN"
