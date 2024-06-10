@@ -1,3 +1,4 @@
+import {useState} from "react";
 import {Modal, ModalContent, ModalFooter, ModalHeader, ModalBody , Button} from "@nextui-org/react";
 //-----------------------------------------------------------------------------------------------------------
 
@@ -10,10 +11,18 @@ interface EventSignDialogProps {
 };
 //-----------------------------------------------------------------------------------------------------------
 export default function EventSignDialog({isOpen, onOpenChange, closeEvent, getEvents, selectedId}: EventSignDialogProps) {
+  const [callingAPI, setCallingAPI] = useState(false);
+
   const handleClose = async (id: string) => {
-    await closeEvent(id);
-    await getEvents();
-    onOpenChange();
+    try{
+      setCallingAPI(true);
+      await closeEvent(id);
+      await getEvents();
+      onOpenChange();
+      setCallingAPI(false);
+    }catch(err){
+      setCallingAPI(false);
+    }
   };
 
   return (
@@ -36,10 +45,14 @@ export default function EventSignDialog({isOpen, onOpenChange, closeEvent, getEv
               </ModalBody>
 
               <ModalFooter className='mt-5'>
-                <Button className='bg-black text-white' onClick={() => handleClose(selectedId)}>
+                <Button 
+                  className='bg-black text-white' 
+                  onClick={() => handleClose(selectedId)}
+                  isDisabled={callingAPI}
+                >
                   Submit
                 </Button>
-                <Button color="default" onPress={onClose}>
+                <Button color="default" onPress={onClose} isDisabled={callingAPI}>
                   Cancel
                 </Button>
               </ModalFooter>
