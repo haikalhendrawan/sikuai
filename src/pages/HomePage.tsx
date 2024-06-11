@@ -6,7 +6,7 @@ export default function HomePage() {
       <title>Home</title>
     </Helmet>
 
-    <div className="flex flex-col items-center justify-center h-screen bg-[url('/tail-gradient.png')] bg-no-repeat bg-cover" >
+    <div className="flex flex-col items-center justify-center h-screen bg-[url('/bg-effect.png')] bg-no-repeat bg-cover" >
       <div className="flex flex-col w-full items-center justify-center gap-2">
           <h1 className="text-3xl font-bold">Protected Route</h1>
       </div>

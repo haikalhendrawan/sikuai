@@ -1,7 +1,8 @@
-import {useState, useEffect} from "react";
+import {useState, useEffect, useMemo} from "react";
 import { Key } from '@react-types/shared';
-import {Input, Image, Autocomplete, AutocompleteItem} from "@nextui-org/react";
+import {Input, Image, Autocomplete, AutocompleteItem, Textarea} from "@nextui-org/react";
 import { EmployeeDataTypes, EmployeeFormTypes } from "./types";
+import moment from "moment";
 
 
 interface EmployeeFormProps{
@@ -30,17 +31,36 @@ export default function EmployeeForm({employee}: EmployeeFormProps) {
 
   const [imageSrc, setImageSrc] = useState("/default-pp.jpg");
 
+  const [empty, setEmpty] = useState(true);
+
   const handleImageError = () => {
     setImageSrc("/default-pp.jpg");
   };
 
-  const handleSelectChange = (v: Key) => {
+  const handleSelectChange = (v: Key | null) => {
     setValue(v as number);
 
-    const selectedEmployee = (employee.length > 0 && value!==0)? employee.find((item) => item.No == v ) : null;
-    const NIP = selectedEmployee ? selectedEmployee.NIP.slice(1) : null;
+    const NIP = (employee.length > 0 && v!==0)? employee.find((item) => item.No== v)?.NIP.slice(1) || "": ""
     setImageSrc(`https://sikuai.web.id/uploads/fpbn/${NIP}.jpg`);
+    
+    const isEmpty = v==null;
+    setEmpty(isEmpty);
   };
+
+  const employeeSelection = useMemo(() => 
+    employee.map((user: EmployeeDataTypes) => (
+      <AutocompleteItem key={user.No} textValue={user.Nama}>
+        {user.Nama}
+      </AutocompleteItem>
+    )), 
+    [employee]
+  );
+
+  const tempatLahir = empForm.tempatLahir;
+
+  const tanggalLahir = moment(new Date(empForm.tanggalLahir.slice(1))).format('D MMM YYYY');
+
+  const ttlFooter = value?`${tempatLahir}, ${tanggalLahir}`:null
 
   useEffect(() => {
     if(value == 0){
@@ -94,7 +114,9 @@ export default function EmployeeForm({employee}: EmployeeFormProps) {
           />
           <p className="text-sm text-slate-500 pt-4">{empForm.email}</p>
           <p className="text-sm text-slate-500">{empForm.hp.slice(1)}</p>
-          <p className="text-sm text-slate-500 pt-4">{`TTL: ${empForm.tempatLahir}, ${empForm.tanggalLahir.slice(1)}`}</p>
+          <p className="text-sm text-slate-500 pt-4">
+            {`TTL: `}{ttlFooter}
+          </p>
         </div>
 
         <div className="grid grid-cols-2 gap-4 w-3/5">
@@ -109,58 +131,64 @@ export default function EmployeeForm({employee}: EmployeeFormProps) {
             selectedKey={value}
             onSelectionChange={handleSelectChange}
             placeholder="Nama"
-            isInvalid={value===0}
+            isInvalid={empty}
           >
-            {(user) => (
-              <AutocompleteItem key={user.No} textValue={user.Nama}>
-                {user.Nama}
-              </AutocompleteItem>
-            )}
+            {employeeSelection}
           </Autocomplete>
-          <Input
+          <Textarea
             name='esIII'
             label="Bidang/Bagian/KPPN"
             size="lg"
             variant="bordered"
             className="max-w-xl px-2"
-            value={empForm.esIII || ""}
+            value={empForm.esIII || " "}
             labelPlacement="outside"
+            spellCheck={false}
+            minRows={2}
           />
           <Input
             name='nip'
             label="NIP"
             size="lg"
             variant="bordered"
+            placeholder=" "
             className="max-w-xl px-2"
-            value={empForm.nip.slice(1) || ""}
+            spellCheck={false}
+            value={empForm.nip.slice(1) || " "}
             labelPlacement="outside"
           />
-          <Input
+          <Textarea
             name='esIV'
             label="Seksi"
             size="lg"
             variant="bordered"
             className="max-w-xl px-2"
-            value={empForm.esIV || ""}
+            spellCheck={false}
+            value={empForm.esIV || " "}
             labelPlacement="outside"
+            minRows={2}
           />
           <Input
             name='pangkatGol'
             label="Pangkat/Gol"
             size="lg"
             variant="bordered"
+            placeholder=" "
             className="max-w-xl px-2"
-            value={empForm.pangkatGol || ""}
+            spellCheck={false}
+            value={empForm.pangkatGol || " "}
             labelPlacement="outside"
           />
-          <Input
+          <Textarea
             name='jabatan'
             label="Jabatan"
             size="lg"
             variant="bordered"
             className="max-w-xl px-2"
-            value={empForm.jabatan || ""}
+            value={empForm.jabatan || " "}
             labelPlacement="outside"
+            spellCheck={false}
+            minRows={2}
           />
           <div className="grid grid-col-2 grid-flow-col gap-4">
             <Input
@@ -168,8 +196,10 @@ export default function EmployeeForm({employee}: EmployeeFormProps) {
               label="Gelar Depan"
               size="lg"
               variant="bordered"
+              placeholder=" "
               className="px-2"
               value={empForm.gelarDepan || ""}
+              spellCheck={false}
               labelPlacement="outside"
             />
             <Input
@@ -177,8 +207,10 @@ export default function EmployeeForm({employee}: EmployeeFormProps) {
               label="Gelar Belakang"
               size="lg"
               variant="bordered"
+              placeholder=" "
               className=" px-2"
               value={empForm.gelarBelakang || ""}
+              spellCheck={false}
               labelPlacement="outside"
             />
           </div>
@@ -188,12 +220,13 @@ export default function EmployeeForm({employee}: EmployeeFormProps) {
               size="lg"
               variant="bordered"
               className="max-w-xl px-2"
+              placeholder=" "
               value={empForm.pendidikan || ""}
+              spellCheck={false}
               labelPlacement="outside"
           />
         </div>
       </div>
-
     </>
   )
 }
