@@ -1,113 +1,121 @@
 import {useState, useEffect} from "react";
-import {Input, Button, Select, SelectItem, Image, Autocomplete, AutocompleteItem} from "@nextui-org/react";
-import AttendanceReport from "../PDF/AttendanceReport";
-import axiosAuth from "../../config/axios";
+import { Key } from '@react-types/shared';
+import {Input, Image, Autocomplete, AutocompleteItem} from "@nextui-org/react";
+import { EmployeeDataTypes, EmployeeFormTypes } from "./types";
 
-interface EmployeeFormTypes{
-  no: number,
-  nama: string,
-  nip: string,
-  pangkatGol: string,
-  gelarDepan: string,
-  gelarBelakang: string,
-  email: string,
-  hp: string,
-  esIII: string,
-  esIV: string,
-  jabatan: string,
-  pendidikan: string
+
+interface EmployeeFormProps{
+  employee: EmployeeDataTypes[] | []
 };
-const animals = [
-  {label: "Cat", value: "cat", description: "The second most popular pet in the world"},
-  {label: "Dog", value: "dog", description: "The most popular pet in the world"},
-  {label: "Elephant", value: "elephant", description: "The largest land animal"},
-  {label: "Lion", value: "lion", description: "The king of the jungle"},
-  {label: "Tiger", value: "tiger", description: "The largest cat species"},
-  {label: "Giraffe", value: "giraffe", description: "The tallest land animal"},
-  {
-    label: "Dolphin",
-    value: "dolphin",
-    description: "A widely distributed and diverse group of aquatic mammals",
-  },
-  {label: "Penguin", value: "penguin", description: "A group of aquatic flightless birds"},
-  {label: "Zebra", value: "zebra", description: "A several species of African equids"},
-  {
-    label: "Shark",
-    value: "shark",
-    description: "A group of elasmobranch fish characterized by a cartilaginous skeleton",
-  },
-  {
-    label: "Whale",
-    value: "whale",
-    description: "Diverse group of fully aquatic placental marine mammals",
-  },
-  {label: "Otter", value: "otter", description: "A carnivorous mammal in the subfamily Lutrinae"},
-  {label: "Crocodile", value: "crocodile", description: "A large semiaquatic reptile"},
-];
 
+export default function EmployeeForm({employee}: EmployeeFormProps) {
+  const [value, setValue] = useState<number>(0);
 
-export default function EmployeeForm(){
-  const [value, setValue] = useState<EmployeeFormTypes>({
+  const [empForm, setEmpForm] = useState<EmployeeFormTypes>({
     no: 0,
-    nama: '',
-    nip: '199904082021011001',
-    pangkatGol: '',
-    gelarDepan: '',
-    gelarBelakang: '',
-    email: '',
-    hp: '',
-    esIII: '',
-    esIV: '',
-    jabatan: '',
-    pendidikan: ''
+    nama: "",
+    nip: "",
+    pangkatGol: "",
+    gelarDepan: "",
+    gelarBelakang: "",
+    tempatLahir: "",
+    tanggalLahir:"",
+    email: "",
+    hp: "",
+    esIII: "",
+    esIV: "",
+    jabatan: "",
+    pendidikan: "",
   });
 
-  const handleChange = (e: (React.ChangeEvent<HTMLInputElement>| React.ChangeEvent<HTMLSelectElement>)) => {
-    setValue((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
-
-    setImageSrc(`https://sikuai.web.id/uploads/fpbn/${e.target.value}.jpg`)
-  };
-
-  const [imageSrc, setImageSrc] = useState(`https://sikuai.web.id/uploads/fpbn/${value.nip}.jpg`)
+  const [imageSrc, setImageSrc] = useState("/default-pp.jpg");
 
   const handleImageError = () => {
     setImageSrc("/default-pp.jpg");
   };
+
+  const handleSelectChange = (v: Key) => {
+    setValue(v as number);
+
+    const selectedEmployee = (employee.length > 0 && value!==0)? employee.find((item) => item.No == v ) : null;
+    const NIP = selectedEmployee ? selectedEmployee.NIP.slice(1) : null;
+    setImageSrc(`https://sikuai.web.id/uploads/fpbn/${NIP}.jpg`);
+  };
+
+  useEffect(() => {
+    if(value == 0){
+      return setEmpForm((prev) => ({
+        ...prev,
+        no: 0,
+        nama: "",
+        nip: "",
+        pangkatGol: "",
+        gelarDepan: "",
+        gelarBelakang: "",
+        tempatLahir: "",
+        tanggalLahir: "",
+        email: "",
+        hp: "",
+        esIII: "",
+        esIV: "",
+        jabatan: "",
+        pendidikan: "",
+      }))
+    }
+    setEmpForm((prev) => ({
+      ...prev,
+      nama: (employee.length > 0 && value!==0)? employee.find((item) => item.No == value )?.Nama || "": "",
+      nip: (employee.length > 0 && value!==0)? employee.find((item) => item.No == value )?.NIP || "": "",
+      pangkatGol: (employee.length > 0 && value!==0)? employee.find((item) => item.No == value )?.Pangkat || "": "",
+      gelarDepan: (employee.length > 0 && value!==0)? employee.find((item) => item.No == value )?.GelarDepan || "": "",
+      gelarBelakang: (employee.length > 0 && value!==0)? employee.find((item) => item.No == value )?.GelarBelakang || "": "",
+      tempatLahir: (employee.length > 0 && value!==0)? employee.find((item) => item.No == value )?.TempatLahir || "": "",
+      tanggalLahir: (employee.length > 0 && value!==0)? employee.find((item) => item.No == value )?.TanggalLahir || "": "",
+      hp: (employee.length > 0 && value!==0)? employee.find((item) => item.No == value )?.HP || "": "",
+      email: (employee.length > 0 && value!==0)? employee.find((item) => item.No == value )?.Email || "" : "",
+      esIII: (employee.length > 0 && value!==0)? employee.find((item) => item.No == value )?.UnitEselonIII || "": "",
+      esIV: (employee.length > 0 && value!==0)? employee.find((item) => item.No == value )?.UnitEselonIV || "": "",
+      jabatan: (employee.length > 0 && value!==0)? employee.find((item) => item.No == value )?.Jabatan || "": "",
+      pendidikan: (employee.length > 0 && value!==0)? employee.find((item) => item.No == value )?.PendidikanTerakhir || "": "", 
+    }));
+  }, [employee, value])
 
   return(
     <>
       <div className="flex justify-center items-center gap-1">
         <div className="flex flex-col justify-center items-center w-2/5">
           <Image
-            width={250}
+            width={300}
+            height={300}
             src={imageSrc}
-            className="mx-auto rounded-3xl" 
-            alt='profile pegawai'
+            className="mx-auto rounded-3xl w-[300px] h-[400px] object-cover"
+            alt="profile pegawai"
             onError={handleImageError}
           />
-          <p className="text-sm text-slate-500 pt-4">haikal.hendrawan@kemenkeu.go.id</p>
-          <p className="text-sm text-slate-500">081291249590</p>
-          <p className="text-sm text-slate-500 pt-4">Tempat Tgl Lahir: Jakarta, 8 April 1999</p>
+          <p className="text-sm text-slate-500 pt-4">{empForm.email}</p>
+          <p className="text-sm text-slate-500">{empForm.hp.slice(1)}</p>
+          <p className="text-sm text-slate-500 pt-4">{`TTL: ${empForm.tempatLahir}, ${empForm.tanggalLahir.slice(1)}`}</p>
         </div>
 
         <div className="grid grid-cols-2 gap-4 w-3/5">
           <Autocomplete
             name='nama'
-            label="Nama"
+            label="Ketik nama pegawai disini"
             size="lg"
-            isRequired  
             variant="bordered"
             className="max-w-xl px-2"
-            defaultItems={animals}
+            defaultItems={employee}
             labelPlacement="outside"
-            selectedKey={value.nama}
-            onChange={handleChange}
-            description={'Ketik nama pegawai disini'}
+            selectedKey={value}
+            onSelectionChange={handleSelectChange}
+            placeholder="Nama"
+            isInvalid={value===0}
           >
-            {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
+            {(user) => (
+              <AutocompleteItem key={user.No} textValue={user.Nama}>
+                {user.Nama}
+              </AutocompleteItem>
+            )}
           </Autocomplete>
           <Input
             name='esIII'
@@ -115,9 +123,8 @@ export default function EmployeeForm(){
             size="lg"
             variant="bordered"
             className="max-w-xl px-2"
-            value={value.nama}
+            value={empForm.esIII || ""}
             labelPlacement="outside"
-            onChange={handleChange}
           />
           <Input
             name='nip'
@@ -125,9 +132,8 @@ export default function EmployeeForm(){
             size="lg"
             variant="bordered"
             className="max-w-xl px-2"
-            value={value.nama}
+            value={empForm.nip.slice(1) || ""}
             labelPlacement="outside"
-            onChange={handleChange}
           />
           <Input
             name='esIV'
@@ -135,9 +141,8 @@ export default function EmployeeForm(){
             size="lg"
             variant="bordered"
             className="max-w-xl px-2"
-            value={value.nama}
+            value={empForm.esIV || ""}
             labelPlacement="outside"
-            onChange={handleChange}
           />
           <Input
             name='pangkatGol'
@@ -145,9 +150,8 @@ export default function EmployeeForm(){
             size="lg"
             variant="bordered"
             className="max-w-xl px-2"
-            value={value.nama}
+            value={empForm.pangkatGol || ""}
             labelPlacement="outside"
-            onChange={handleChange}
           />
           <Input
             name='jabatan'
@@ -155,9 +159,8 @@ export default function EmployeeForm(){
             size="lg"
             variant="bordered"
             className="max-w-xl px-2"
-            value={value.nama}
+            value={empForm.jabatan || ""}
             labelPlacement="outside"
-            onChange={handleChange}
           />
           <div className="grid grid-col-2 grid-flow-col gap-4">
             <Input
@@ -166,9 +169,8 @@ export default function EmployeeForm(){
               size="lg"
               variant="bordered"
               className="px-2"
-              value={value.nama}
+              value={empForm.gelarDepan || ""}
               labelPlacement="outside"
-              onChange={handleChange}
             />
             <Input
               name='gelarBelakang'
@@ -176,9 +178,8 @@ export default function EmployeeForm(){
               size="lg"
               variant="bordered"
               className=" px-2"
-              value={value.nama}
+              value={empForm.gelarBelakang || ""}
               labelPlacement="outside"
-              onChange={handleChange}
             />
           </div>
           <Input
@@ -187,9 +188,8 @@ export default function EmployeeForm(){
               size="lg"
               variant="bordered"
               className="max-w-xl px-2"
-              value={value.nama}
+              value={empForm.pendidikan || ""}
               labelPlacement="outside"
-              onChange={handleChange}
           />
         </div>
       </div>

@@ -12,7 +12,7 @@ export default function EmployeePage() {
 
       <div className="flex flex-col items-center justify-center h-screen bg-[url('/tail-gradient-reverse.png')] bg-no-repeat bg-cover" >
         <div className="flex flex-row w-full items-center justify-center gap-2">
-          <Image src="/sikuai.png" width={100} height={100} />
+          {/* <Image src="/sikuai.png" width={100} height={100} /> */}
           <h1 className="text-3xl font-bold">Query Data Pegawai</h1>
         </div>
         <div className="w-full  p-4">
