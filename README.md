@@ -1,1 +1,1 @@
-E-Attendance client
+Sikuai client
