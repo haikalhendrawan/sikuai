@@ -16,7 +16,8 @@ export default function EmployeeForm({employee}: EmployeeFormProps) {
     no: 0,
     nama: "",
     nip: "",
-    pangkatGol: "",
+    pangkat: "",
+    gol:"",
     gelarDepan: "",
     gelarBelakang: "",
     tempatLahir: "",
@@ -48,7 +49,7 @@ export default function EmployeeForm({employee}: EmployeeFormProps) {
   };
 
   const employeeSelection = useMemo(() => 
-    employee.map((user: EmployeeDataTypes) => (
+    employee?.map((user: EmployeeDataTypes) => (
       <AutocompleteItem key={user.No} textValue={user.Nama}>
         {user.Nama}
       </AutocompleteItem>
@@ -69,7 +70,8 @@ export default function EmployeeForm({employee}: EmployeeFormProps) {
         no: 0,
         nama: "",
         nip: "",
-        pangkatGol: "",
+        pangkat: "",
+        gol: "",
         gelarDepan: "",
         gelarBelakang: "",
         tempatLahir: "",
@@ -86,7 +88,8 @@ export default function EmployeeForm({employee}: EmployeeFormProps) {
       ...prev,
       nama: (employee.length > 0 && value!==0)? employee.find((item) => item.No == value )?.Nama || "": "",
       nip: (employee.length > 0 && value!==0)? employee.find((item) => item.No == value )?.NIP || "": "",
-      pangkatGol: (employee.length > 0 && value!==0)? employee.find((item) => item.No == value )?.Pangkat || "": "",
+      pangkat: (employee.length > 0 && value!==0)? employee.find((item) => item.No == value )?.Pangkat || "": "",
+      gol: (employee.length > 0 && value!==0)? employee.find((item) => item.No == value )?.Gol || "": "",
       gelarDepan: (employee.length > 0 && value!==0)? employee.find((item) => item.No == value )?.GelarDepan || "": "",
       gelarBelakang: (employee.length > 0 && value!==0)? employee.find((item) => item.No == value )?.GelarBelakang || "": "",
       tempatLahir: (employee.length > 0 && value!==0)? employee.find((item) => item.No == value )?.TempatLahir || "": "",
@@ -176,7 +179,7 @@ export default function EmployeeForm({employee}: EmployeeFormProps) {
             placeholder=" "
             className="max-w-xl px-2"
             spellCheck={false}
-            value={empForm.pangkatGol || " "}
+            value={`${empForm.pangkat} (${empForm.gol})` || " "}
             labelPlacement="outside"
           />
           <Textarea

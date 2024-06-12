@@ -21,7 +21,7 @@ export default function UploadDataSection() {
     if (!selectedFile) {
       setApiResponse("No file selected");
       return;
-    }
+    };
 
     const formData = new FormData();
     formData.append('file', selectedFile);
@@ -35,8 +35,12 @@ export default function UploadDataSection() {
       });
       setApiResponse(response.data.message);
     }catch(err: any){
-      console.error(err);
-      setApiResponse(err.response.data.message);
+      if(err.response){
+        console.error(err);
+        setApiResponse(err.response.data.message);
+      }else{
+        setApiResponse(err.message);
+      };
     }
   }
 

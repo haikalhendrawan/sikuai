@@ -1,4 +1,5 @@
 import {Routes, Route} from "react-router-dom";
+import HorizontalLayout from "./layouts/Horizontal/HorizontalLayout";
 import EventListPage from "./pages/EventListPage";
 import AttFormPage from "./pages/AttFormPage";
 import AttPreviewPage from "./pages/AttPreviewPage";
@@ -10,7 +11,7 @@ import UploadDataPage from "./pages/UploadDataPage";
 export default function Router(){
   return (
     <Routes>
-      <Route path="/">
+      <Route path="/" element={<HorizontalLayout />}>
         <Route index element={<HomePage/>}/>
         <Route path="attForm" element={<AttFormPage/>} />
         <Route path="events" element={<EventListPage />} />
