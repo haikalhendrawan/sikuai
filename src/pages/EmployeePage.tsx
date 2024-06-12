@@ -1,6 +1,5 @@
 import { Helmet } from "react-helmet-async";
 import EmployeeSection from "../sections/Employee/EmployeeSection";
-import {Tabs, Tab, Link} from "@nextui-org/react";
 
 
 export default function EmployeePage() {

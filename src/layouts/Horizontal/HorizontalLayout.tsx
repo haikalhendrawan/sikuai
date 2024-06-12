@@ -1,6 +1,5 @@
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Tabs, Tab, Image} from "@nextui-org/react";
+import {Navbar, NavbarBrand, NavbarContent, Tabs, Tab, Image} from "@nextui-org/react";
 import { Outlet, useLocation } from "react-router-dom";
-import { Key } from '@react-types/shared';
 
 
 export default function HorizontalLayout() {

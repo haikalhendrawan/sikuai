@@ -17,7 +17,7 @@ export default function UploadDataSection() {
     }
   };
 
-  const handleFileUpload = async (event: any) => {
+  const handleFileUpload = async () => {
     if (!selectedFile) {
       setApiResponse("No file selected");
       return;
