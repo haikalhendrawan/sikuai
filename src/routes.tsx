@@ -6,6 +6,7 @@ import AttPreviewPage from "./pages/AttPreviewPage";
 import EmployeePage from "./pages/EmployeePage";
 import HomePage from "./pages/HomePage";
 import UploadDataPage from "./pages/UploadDataPage";
+import GeneratorPage from "./pages/GeneratorPage";
 
 
 export default function Router(){
@@ -13,13 +14,15 @@ export default function Router(){
     <Routes>
       <Route path="/" element={<HorizontalLayout />}>
         <Route index element={<HomePage/>}/>
-        <Route path="attForm" element={<AttFormPage/>} />
         <Route path="events" element={<EventListPage />} />
         <Route path="employee" element={<EmployeePage />} />
         <Route path="inject" element={<UploadDataPage />} />
-        <Route path="preview">
-          <Route path=":id" element={<AttPreviewPage />} />
-        </Route>
+        <Route path="generator" element={<GeneratorPage />} />
+      </Route>
+
+      <Route path="/attForm" element={<AttFormPage/>} />
+      <Route path="/preview">
+        <Route path=":id" element={<AttPreviewPage />} />
       </Route>
     </Routes>
   )

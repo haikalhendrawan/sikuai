@@ -5,7 +5,6 @@ import { Outlet, useLocation } from "react-router-dom";
 export default function HorizontalLayout() {
   const {pathname} = useLocation();
 
-  console.log(pathname)
   return (
     <>
       <Navbar isBordered>
@@ -17,7 +16,7 @@ export default function HorizontalLayout() {
             <Tabs selectedKey={pathname} color={'default'} aria-label="Tabs colors" radius="full">
               <Tab key='/employee' id="/employee" href="/employee" title="Query" />
               <Tab key= '/events' id="/events" href="/events" title="Attendance" />
-              <Tab id="/" href="/" title="Generator" />
+              <Tab key='/generator' id="/generator" href="/generator" title="Generator" />
             </Tabs>
           </div>
         </NavbarContent>
