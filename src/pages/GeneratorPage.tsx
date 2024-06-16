@@ -10,7 +10,13 @@ export default function GeneratorPage() {
         <title>Event List </title>
       </Helmet>
 
-      <GeneratorSection />
+      <div className="flex flex-col items-center justify-start min-h-screen py-10 bg-[url('/bg-effect.png')] bg-no-repeat bg-cover" >
+        <div className="flex flex-col w-full items-center justify-center gap-2 mb-10">
+          <h1 className="text-3xl font-bold">Generator</h1>          
+        </div>
+        
+        <GeneratorSection />
+      </div>
     </>
   )
 }

@@ -97,7 +97,6 @@ export default function EventListSection(){
   return(
     <>
 
-      {/* <Snackbar/> */}
       <EventListTable 
         events={events} 
         getEvents={getEvents} 

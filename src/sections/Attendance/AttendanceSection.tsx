@@ -3,6 +3,7 @@ import AttendanceForm from "./AttendanceForm";
 import AttendanceSubmitted from "./AttendanceSubmitted";
 import axiosAuth from "../../config/axios";
 import { AddAttendanceBody, TodayEventsType } from "./types";
+import toast , {Toaster} from 'react-hot-toast';
 
 
 export default function AttendanceSection(){
@@ -19,7 +20,7 @@ export default function AttendanceSection(){
     try{
       await axiosAuth.post(`/addAttendance`, body);
       setSection(1);
-    }catch(err){
+    }catch(err: any){
       throw err
     }
   };
@@ -32,8 +33,20 @@ export default function AttendanceSection(){
         ...event,
       }));
       setTodayEvents(mapped);
-    }catch(err){
-      throw err
+    }catch(err: any){
+      if(err.response){
+        console.log(err)
+        toast.error(err.response.data.message, {
+          position: 'top-right',
+          className:'text-sm'
+        });
+      }else{
+        console.log(err)
+        toast.error(err.message, {
+          position: 'top-right',
+          className:'text-sm'
+        });
+      }
     }
   };
 

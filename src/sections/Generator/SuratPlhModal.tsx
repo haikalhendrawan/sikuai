@@ -1,15 +1,14 @@
 import {useState, useMemo} from "react";
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, DateValue,  
         Button, DatePicker, Avatar, Select, SelectItem, Autocomplete, AutocompleteItem} from "@nextui-org/react";
-import {parseDate} from "@internationalized/date";
 import { Key } from '@react-types/shared';
 import { EmployeeDataTypes } from "./types";
 import Docxtemplater from 'docxtemplater';
 import PizZip from 'pizzip';
-import PizZipUtils from 'pizzip/utils/index.js';
 import { saveAs } from 'file-saver';
 import expressionParser from 'docxtemplater/expressions';
 import moment from "moment-timezone";
+import { loadFilePromise, getUnitKerja } from "./utils";
 //-----------------------------------------------------------------------------------------------------------
 interface SuratPlhModalProps {
   isOpen: boolean,
@@ -21,6 +20,9 @@ const SELECT_ALASAN = [
   {label: "Cuti Tahunan", value: "1", text: 'melaksanakan cuti tahunan'},
   {label: "Cuti Sakit", value: "2", text: 'melaksanakan cuti sakit'},
   {label: "Dinas Luar", value: "3", text: 'melaksanakan penugasan'},
+  {label: "Cuti Besar", value: "4", text: 'melaksanakan cuti besar'},
+  {label: "Cuti Karena Alasan Penting", value: "5", text: 'melaksanakan cuti karena alasan penting'},
+  {label: "Cuti Melahirkan", value: "6", text: 'cuti melahirkan'},
 ];
 
 interface ValueType{
@@ -34,7 +36,7 @@ interface ValueType{
 
 //-----------------------------------------------------------------------------------------------------------
 export default function SuratPlhModal({isOpen, onOpenChange, employee}: SuratPlhModalProps) {
-  const [callingAPI, setCallingAPI] = useState(false);
+  const [errorText, setErrorText] = useState<string>('');
 
   const [value, setValue] = useState<ValueType>({
     selectAsli: 0,
@@ -66,36 +68,35 @@ export default function SuratPlhModal({isOpen, onOpenChange, employee}: SuratPlh
     tanggalSelesai: '',
     lamaWaktu: '',
     ending: '',
-    unitKecil: asli.jabatan,
+    year: new Date().getFullYear(),
   });
 
-  const generateDocument = () => {
-    loadFile(
-      `${import.meta.env.VITE_API_URL}/template/templateNodePlh.docx`,
-      function (error: any, content: any) {
-        if (error) {
-          console.log(error)
-          throw error
-        };
-        const zip = new PizZip(content);
-        const doc = new Docxtemplater(zip, {
-          paragraphLoop: true,
-          linebreaks: true,
-          parser: expressionParser,
-        });
-        doc.render({
-          asli,
-          pengganti, 
-          info
-        });
-        const out = doc.getZip().generate({
-          type: 'blob',
-          mimeType:
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        }); 
-        saveAs(out, 'output.docx');
-      }
-    );
+  const generateDocument = async () => {
+    try {
+      const content = await loadFilePromise(`${import.meta.env.VITE_API_URL}/template/templateNodePlh.docx`);
+      const zip = new PizZip(content);
+      const doc = new Docxtemplater(zip, {
+        paragraphLoop: true,
+        linebreaks: true,
+        parser: expressionParser,
+      });
+  
+      doc.render({
+        asli,
+        pengganti,
+        info,
+      });
+  
+      const out = doc.getZip().generate({
+        type: 'blob',
+        mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      });
+  
+      saveAs(out, 'output.docx');
+    } catch(err: any) {
+      console.error(err.message);
+      setErrorText(err.message);
+    }
   };
 
   const handleSelectChangeAsli = (v: Key | null) => {
@@ -153,6 +154,7 @@ export default function SuratPlhModal({isOpen, onOpenChange, employee}: SuratPlh
       tanggalSelesai: formatDate(e?.toString() || new Date().toISOString().split('T')[0]),
       lamaWaktu: getLamaWaktu(info.tanggalMulai, formatDate(e?.toString() || new Date().toISOString().split('T')[0])) || '',
     }));
+
   };
 
   const handleSelectChangePengganti= (v: Key | null) => {
@@ -213,7 +215,7 @@ export default function SuratPlhModal({isOpen, onOpenChange, employee}: SuratPlh
   );
 
   const alasanSelection = useMemo(() => 
-    SELECT_ALASAN?.map((item, index) => (
+    SELECT_ALASAN?.map((item) => (
       <SelectItem key={item.value}>
         {item.label}
       </SelectItem>
@@ -302,31 +304,27 @@ export default function SuratPlhModal({isOpen, onOpenChange, employee}: SuratPlh
                 <Button 
                   className='bg-black text-white' 
                   onClick={generateDocument} 
-                  isDisabled={callingAPI}
                 >
-                  Add
+                  Generate
                 </Button>
                 <Button 
                   color="default" 
                   onClick={handleReset} 
-                  isDisabled={callingAPI}
                 >
                   Reset
                 </Button>
               </ModalFooter>
+              <p>{errorText}</p>
             </>
           )}
         </ModalContent>
+
       </Modal>
     </>
   );
 }
 
 // -----------------------------------------------------------------------------------------------------
-function loadFile(url: string, callback: any) {
-  PizZipUtils.getBinaryContent(url, callback);
-};
-
 function getAlasan(value: string) {
   // const alasan = [
   //   {label: "Cuti Tahunan", value: "1", text: 'melaksanakan cuti tahunan'},
@@ -351,19 +349,21 @@ function formatDate(dateStr: string) {
 function getSebutan(sex: string) {
   if(sex.toLowerCase()==='p'){
     return "Sdri."
-  }
+  };
   return "Sdr."
 };
 
 function getLamaWaktu(startDate: string, endDate: string) {
   const tanggalAwal = startDate.split(" ")[0];
+  const bulanAwal = startDate.split(" ")[1];
 
   const tanggalAkhir = endDate.split(" ")[0];
   const bulanAkhir = endDate.split(" ")[1];
 
-  const isTheSameMonth = moment(startDate, 'YYYY-MM-DD').isSame(moment(endDate, 'YYYY-MM-DD'), 'month');
+  const isTheSameDate = tanggalAwal === tanggalAkhir;
+  const isTheSameMonth = bulanAwal === bulanAkhir;
 
-  if(startDate === endDate){
+  if(isTheSameDate){
     return `${startDate} ${new Date().getFullYear()}`
   };
 
@@ -378,19 +378,7 @@ function getLamaWaktu(startDate: string, endDate: string) {
 function getEnding(eselon: string, jabatan: string){
   if(eselon.toLowerCase() === 'pelaksana'){
     return "."
-  }
+  };
 
   return `, disamping melaksanakan tugas pokok sebagai ${jabatan}.`
-};
-
-function getUnitKerja(unit: string | undefined){
-  if(!unit){
-    return ""
-  };
-  
-  return unit
-  .replace("Kanwil DJPBN Prov. Sumatera Barat", "Kantor Wilayah Direktorat Jenderal Perbendaharaan Provinsi Sumatera Barat")
-  .replace("(A1)", "")
-  .replace("(A2)", "")
-  .replace("KPPN", "Kantor Pelayanan Perbendaharaan Negara")
 };

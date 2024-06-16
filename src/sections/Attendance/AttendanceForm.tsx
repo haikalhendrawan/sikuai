@@ -2,6 +2,7 @@ import {useState} from "react";
 import {Input, Button, Select, SelectItem} from "@nextui-org/react";
 import { AddAttendanceBody, AttendanceFormTypes, AddAttendanceError,
   nameSchema, emailSchema, identifierSchema, unitSchema, idSchema} from "./types";
+import toast , {Toaster} from 'react-hot-toast';
 //-----------------------------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------------------------
@@ -67,8 +68,20 @@ export default function AttendanceForm({todayEvents, addAttendance}: AttendanceF
       }
 
       await addAttendance(value);
-    }catch(err){
-      console.log(err)
+    }catch(err: any){
+      if(err.response){
+        console.log(err)
+        toast.error(err.response.data.message, {
+          position: 'top-right',
+          className:'text-sm'
+        });
+      }else{
+        console.log(err)
+        toast.error(err.message, {
+          position: 'top-right',
+          className:'text-sm'
+        });
+      }
     }
   };
 
@@ -157,10 +170,10 @@ export default function AttendanceForm({todayEvents, addAttendance}: AttendanceF
           onChange={handleChange}
         />
 
-        
-
         <Button onClick={handleSubmit}> Submit </Button>
       </div>
+
+      <Toaster />
        
     </>
   )

@@ -2,6 +2,7 @@ import {useState, useEffect} from "react";
 import EmployeeForm from "./EmployeeForm";
 import axiosAuth from "../../config/axios";
 import { EmployeeDataTypes } from "./types";
+import toast , {Toaster} from 'react-hot-toast';
 
 
 export default function EmployeeSection(){
@@ -12,8 +13,20 @@ export default function EmployeeSection(){
       try{
         const response = await axiosAuth.get("/getAllEmployee");
         setEmployee(response.data.rows);
-      }catch(err){
-        console.log(err)
+      }catch(err: any){
+        if(err.response){
+          console.log(err)
+          return toast.error(err.response.data.message, {
+            position: 'top-right',
+            className:'text-sm'
+          });
+        }else{
+          console.log(err)
+          return toast.error(err.message, {
+            position: 'top-right',
+            className:'text-sm'
+          });
+        }
       }
     }
 
