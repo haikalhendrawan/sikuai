@@ -1,13 +1,14 @@
 import {useState, useEffect} from "react";
 import axiosAuth from "../../config/axios";
 import { EmployeeDataTypes } from "./types";
-import SuratPlhModal from "./SuratPlhModal";
-import SuratLAMPModal from "./SuratLAMPModal";
-import SuratTugasModal from "./SuratTugasModal";
 import {useDisclosure} from "@nextui-org/react";
 import GeneratorCard from "./GeneratorCard";
 import toast , {Toaster} from 'react-hot-toast';
-
+import SuratPlhModal from "./SuratPlhModal";
+import SuratLAMPModal from "./SuratLAMPModal";
+import SuratTugasDiklatModal from "./SuratTugasDiklatModal";
+import SuratTugasKegModal from "./SuratTugasKegModal";
+//-----------------------------------------------------------------------------------------------------------
 export default function GeneratorSection() {
   const [employee, setEmployee] = useState<EmployeeDataTypes[] | []>([]);
 
@@ -15,7 +16,9 @@ export default function GeneratorSection() {
 
   const {isOpen: isOpen2, onOpenChange: onOpenChange2} = useDisclosure(); // surat LAMP modal
 
-  const {isOpen: isOpen3, onOpenChange: onOpenChange3} = useDisclosure(); // surat tugas modal
+  const {isOpen: isOpen3, onOpenChange: onOpenChange3} = useDisclosure(); // surat tugas diklat modal
+
+  const {isOpen: isOpen4, onOpenChange: onOpenChange4} = useDisclosure(); // surat tugas kegiatan modal
 
   useEffect(() => {
     async function getData(){
@@ -44,7 +47,7 @@ export default function GeneratorSection() {
 
   return (
     <>
-      <div className="w-full grid grid-cols-4 max-w-[900px] gap-4 p-4">
+      <div className="w-full grid grid-cols-4 max-w-[900px] gap-8 p-4">
         <GeneratorCard 
           onOpenChange={onOpenChange} 
           title="Surat Perintah (Plh/Plt)" 
@@ -52,26 +55,28 @@ export default function GeneratorSection() {
         />
         <GeneratorCard 
           onOpenChange={onOpenChange2} 
-          title="Surat Lupa Absen (LAP/LAM)" 
+          title="Surat Lupa Absen" 
           imageUrl="/surat-LAMP.png" 
         />
         <GeneratorCard 
           onOpenChange={onOpenChange3} 
           title="Surat Tugas (ST) Diklat" 
-          imageUrl="/plh.png" 
+          imageUrl="/surat-tugas-diklat.png" 
         />
-        {/* <GeneratorCard 
-          onOpenChange={onOpenChange} 
-          title="Surat Keputusan (SK)" 
-          imageUrl="/plh.png" 
-        /> */}
+        <GeneratorCard 
+          onOpenChange={onOpenChange4} 
+          title="Surat Tugas (ST) Kegiatan" 
+          imageUrl="/surat-tugas-diklat.png" 
+        />
       </div>
 
       <SuratPlhModal employee={employee} isOpen={isOpen} onOpenChange={onOpenChange} />
 
       <SuratLAMPModal employee={employee} isOpen={isOpen2} onOpenChange={onOpenChange2} />
 
-      <SuratTugasModal employee={employee} isOpen={isOpen3} onOpenChange={onOpenChange3} />
+      <SuratTugasDiklatModal employee={employee} isOpen={isOpen3} onOpenChange={onOpenChange3} />
+
+      <SuratTugasKegModal employee={employee} isOpen={isOpen4} onOpenChange={onOpenChange4} />
       
       <Toaster />
     </>

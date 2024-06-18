@@ -16,7 +16,7 @@ expressionParser.filters.upper = function (input) {
   return input.toUpperCase();
 };
 //-----------------------------------------------------------------------------------------------------------
-interface SuratTugasModalProps {
+interface SuratTugasDiklatModalProps {
   isOpen: boolean,
   onOpenChange: () => void,
   employee: EmployeeDataTypes[] | []
@@ -50,7 +50,7 @@ interface ValueType{
 };
 
 //-----------------------------------------------------------------------------------------------------------
-export default function SuratTugasModal({isOpen, onOpenChange, employee}: SuratTugasModalProps) {
+export default function SuratTugasDiklatModal({isOpen, onOpenChange, employee}: SuratTugasDiklatModalProps) {
   const [isDiklatOffline, setIsDiklatOffline] = useState<boolean>(false);
 
   const [pegawai, setPegawai] = useState<Key | null>(null);
@@ -80,6 +80,14 @@ export default function SuratTugasModal({isOpen, onOpenChange, employee}: SuratT
         parser: expressionParser,
       });
   
+      const isValidated = validateInput(value, isDiklatOffline);
+      if(!isValidated){
+        return toast.error('Form tidak lengkap', {
+          position: 'top-right',
+          className:'text-sm'
+        });
+      };
+
       doc.render({
         value: setData(isDiklatOffline, value)
       });
@@ -91,8 +99,8 @@ export default function SuratTugasModal({isOpen, onOpenChange, employee}: SuratT
   
       saveAs(out, 'output.docx');
     } catch(err: any) {
-      console.error(JSON.stringify(err.message));
-      toast.error(JSON.stringify(err.message), {
+      console.error(err);
+      toast.error(err.message, {
         position: 'top-right',
         className:'text-sm'
       });
@@ -108,6 +116,14 @@ export default function SuratTugasModal({isOpen, onOpenChange, employee}: SuratT
         linebreaks: true,
         parser: expressionParser,
       });
+
+      const isValidated = validateInput(value, isDiklatOffline);
+      if(!isValidated){
+        return toast.error('Form tidak lengkap', {
+          position: 'top-right',
+          className:'text-sm'
+        });
+      };
   
       doc.render({
         value: setData(isDiklatOffline, value)
@@ -250,7 +266,7 @@ export default function SuratTugasModal({isOpen, onOpenChange, employee}: SuratT
                   className="max-w-xl"
                   placeholder=" "
                   labelPlacement="outside"
-                  description="Cth: PJJ E-Learning Open Access Pusdiklat AP 2024"
+                  description="Tulis lengkap, cth: Pelatihan Local Economic Empowerment Tahun 2024"
                   variant="bordered"
                   value={value.judulPelatihan}
                   onChange={handleChange}
@@ -293,7 +309,7 @@ export default function SuratTugasModal({isOpen, onOpenChange, employee}: SuratT
                   className="max-w-xl"
                   placeholder=" "
                   labelPlacement="outside"
-                  description="Cth: Pemanggilan Peserta Pelatihan Jarak Jauh xxx"
+                  description="Cth: Pemanggilan Peserta Pelatihan Local Economic Empowerment 2024"
                   variant="bordered"
                   value={value.judulND}
                   onChange={handleChange}
@@ -546,5 +562,31 @@ function getLamaWaktu(startDate: string, endDate: string) {
 
 
   return `${startDate} s.d. ${endDate} ${new Date().getFullYear()}`
+};
+
+function validateInput(value: ValueType, isDiklatOffline: boolean) {
+  if(value.judulPelatihan === "" 
+    || value.nomorND === "" 
+    || value.pengirimND === "" 
+    || value.judulND === "" 
+    || value.startDate === null
+    || value.endDate === null
+    || value.peserta.length===0) {
+    return false
+  };
+
+  if(isDiklatOffline){
+    if(value.kota === "" || value.tempat === "" || value.bebanDIPA === "") {
+      return false
+    }
+  }
+
+  if(!isDiklatOffline){
+    if(value.media === "") {
+      return false
+    }
+  }
+
+  return true
 };
 
