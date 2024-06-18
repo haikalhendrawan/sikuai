@@ -29,3 +29,14 @@ export function getUnitKerja(unit: string | undefined){
   .replace("(A2)", "")
   .replace("KPPN", "Kantor Pelayanan Perbendaharaan Negara")
 };
+
+export function getUnitKerjaShort(unit: string | undefined){
+  if(!unit){
+    return ""
+  };
+  
+  return unit
+  .replace("Kanwil DJPBN Prov. Sumatera Barat", "Kanwil DJPb Prov. Sumatera Barat")
+  .replace("(A1)", "")
+  .replace("(A2)", "")
+};

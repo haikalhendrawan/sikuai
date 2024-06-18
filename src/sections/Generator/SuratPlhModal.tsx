@@ -9,6 +9,7 @@ import { saveAs } from 'file-saver';
 import expressionParser from 'docxtemplater/expressions';
 import moment from "moment-timezone";
 import { loadFilePromise, getUnitKerja } from "./utils";
+import toast , {Toaster} from 'react-hot-toast';
 //-----------------------------------------------------------------------------------------------------------
 interface SuratPlhModalProps {
   isOpen: boolean,
@@ -36,8 +37,6 @@ interface ValueType{
 
 //-----------------------------------------------------------------------------------------------------------
 export default function SuratPlhModal({isOpen, onOpenChange, employee}: SuratPlhModalProps) {
-  const [errorText, setErrorText] = useState<string>('');
-
   const [value, setValue] = useState<ValueType>({
     selectAsli: 0,
     selectAlasan: '0',
@@ -95,7 +94,10 @@ export default function SuratPlhModal({isOpen, onOpenChange, employee}: SuratPlh
       saveAs(out, 'output.docx');
     } catch(err: any) {
       console.error(err.message);
-      setErrorText(err.message);
+      toast.error(JSON.stringify(err.message), {
+        position: 'top-right',
+        className:'text-sm'
+      });
     }
   };
 
@@ -174,7 +176,6 @@ export default function SuratPlhModal({isOpen, onOpenChange, employee}: SuratPlh
 
     setInfo(prev => ({
       ...prev,
-      sebutan: getSebutan((employee.length > 0 && v!==0)? employee.find((item) => item.No == v)?.Sex || "": ""),
       ending: getEnding((employee.length > 0 && v!==0)? employee.find((item) => item.No == v)?.Eselon || "": "", (employee.length > 0 && v!==0)? employee.find((item) => item.No == v)?.Jabatan || "": ""),
     }))
   };
@@ -314,7 +315,6 @@ export default function SuratPlhModal({isOpen, onOpenChange, employee}: SuratPlh
                   Reset
                 </Button>
               </ModalFooter>
-              <p>{errorText}</p>
             </>
           )}
         </ModalContent>
@@ -347,6 +347,7 @@ function formatDate(dateStr: string) {
 };
 
 function getSebutan(sex: string) {
+  console.log(sex)
   if(sex.toLowerCase()==='p'){
     return "Sdri."
   };

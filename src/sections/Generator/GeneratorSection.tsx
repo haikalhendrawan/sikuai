@@ -3,6 +3,7 @@ import axiosAuth from "../../config/axios";
 import { EmployeeDataTypes } from "./types";
 import SuratPlhModal from "./SuratPlhModal";
 import SuratLAMPModal from "./SuratLAMPModal";
+import SuratTugasModal from "./SuratTugasModal";
 import {useDisclosure} from "@nextui-org/react";
 import GeneratorCard from "./GeneratorCard";
 import toast , {Toaster} from 'react-hot-toast';
@@ -13,6 +14,8 @@ export default function GeneratorSection() {
   const {isOpen, onOpenChange} = useDisclosure(); // surat plh modal
 
   const {isOpen: isOpen2, onOpenChange: onOpenChange2} = useDisclosure(); // surat LAMP modal
+
+  const {isOpen: isOpen3, onOpenChange: onOpenChange3} = useDisclosure(); // surat tugas modal
 
   useEffect(() => {
     async function getData(){
@@ -52,12 +55,12 @@ export default function GeneratorSection() {
           title="Surat Lupa Absen (LAP/LAM)" 
           imageUrl="/surat-LAMP.png" 
         />
-        {/* <GeneratorCard 
-          onOpenChange={onOpenChange} 
-          title="Surat Tugas (ST)" 
+        <GeneratorCard 
+          onOpenChange={onOpenChange3} 
+          title="Surat Tugas (ST) Diklat" 
           imageUrl="/plh.png" 
         />
-        <GeneratorCard 
+        {/* <GeneratorCard 
           onOpenChange={onOpenChange} 
           title="Surat Keputusan (SK)" 
           imageUrl="/plh.png" 
@@ -67,6 +70,8 @@ export default function GeneratorSection() {
       <SuratPlhModal employee={employee} isOpen={isOpen} onOpenChange={onOpenChange} />
 
       <SuratLAMPModal employee={employee} isOpen={isOpen2} onOpenChange={onOpenChange2} />
+
+      <SuratTugasModal employee={employee} isOpen={isOpen3} onOpenChange={onOpenChange3} />
       
       <Toaster />
     </>

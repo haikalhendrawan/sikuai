@@ -9,6 +9,7 @@ import { saveAs } from 'file-saver';
 import expressionParser from 'docxtemplater/expressions';
 import moment from "moment-timezone";
 import { loadFilePromise, getUnitKerja } from "./utils";
+import toast , {Toaster} from 'react-hot-toast';
 //-----------------------------------------------------------------------------------------------------------
 
 const SELECT_JENIS = [
@@ -31,8 +32,6 @@ interface SuratLAMPModalTypes {
 };
 //-----------------------------------------------------------------------------------------------------------
 export default function SuratLAMPModal({isOpen, onOpenChange, employee}: SuratLAMPModalTypes) {
-  const [errorText, setErrorText] = useState<string>('');
-
   const [value, setValue] = useState<ValueType>({
     selectPegawai: 0,
     selectJenis: '0',
@@ -104,7 +103,10 @@ export default function SuratLAMPModal({isOpen, onOpenChange, employee}: SuratLA
       saveAs(out, 'output.docx');
     } catch(err: any) {
       console.error(err.message);
-      setErrorText(err.message);
+      toast.error(err.message, {
+        position: 'top-right',
+        className:'text-sm'
+      });
     }
   };
 
@@ -275,7 +277,6 @@ export default function SuratLAMPModal({isOpen, onOpenChange, employee}: SuratLA
                     Plh?
                   </Switch>
                 </div>  
-
               </ModalBody>
               <ModalFooter className="mr-4">
                 <Button 
@@ -291,7 +292,6 @@ export default function SuratLAMPModal({isOpen, onOpenChange, employee}: SuratLA
                   Reset
                 </Button>
               </ModalFooter>
-              <p>{errorText}</p>
             </>
           )}
         </ModalContent>
