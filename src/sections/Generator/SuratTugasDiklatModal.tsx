@@ -1,7 +1,7 @@
 import {useState, useMemo} from "react";
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, DateValue, Input, Switch,
         Button, DatePicker, Avatar, Select, SelectItem, Autocomplete, AutocompleteItem, Chip,
-        Textarea} from "@nextui-org/react";
+        } from "@nextui-org/react";
 import { Key } from '@react-types/shared';
 import { EmployeeDataTypes } from "./types";
 import Docxtemplater from 'docxtemplater';
@@ -10,7 +10,7 @@ import { saveAs } from 'file-saver';
 import expressionParser from 'docxtemplater/expressions';
 import moment from "moment-timezone";
 import { loadFilePromise, getUnitKerjaShort } from "./utils";
-import toast , {Toaster} from 'react-hot-toast';
+import toast from 'react-hot-toast';
 expressionParser.filters.upper = function (input) {
   if (!input) return input;
   return input.toUpperCase();

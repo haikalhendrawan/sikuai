@@ -10,7 +10,7 @@ import { saveAs } from 'file-saver';
 import expressionParser from 'docxtemplater/expressions';
 import moment from "moment-timezone";
 import { loadFilePromise, getUnitKerjaShort } from "./utils";
-import toast , {Toaster} from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import Iconify from "../../components/Iconify";
 expressionParser.filters.upper = function (input) {
   if (!input) return input;

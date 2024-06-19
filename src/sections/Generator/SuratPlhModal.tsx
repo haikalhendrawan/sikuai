@@ -9,7 +9,7 @@ import { saveAs } from 'file-saver';
 import expressionParser from 'docxtemplater/expressions';
 import moment from "moment-timezone";
 import { loadFilePromise, getUnitKerja } from "./utils";
-import toast , {Toaster} from 'react-hot-toast';
+import toast from 'react-hot-toast';
 //-----------------------------------------------------------------------------------------------------------
 interface SuratPlhModalProps {
   isOpen: boolean,

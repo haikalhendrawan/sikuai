@@ -9,7 +9,7 @@ import { saveAs } from 'file-saver';
 import expressionParser from 'docxtemplater/expressions';
 import moment from "moment-timezone";
 import { loadFilePromise, getUnitKerja } from "./utils";
-import toast , {Toaster} from 'react-hot-toast';
+import toast from 'react-hot-toast';
 //-----------------------------------------------------------------------------------------------------------
 
 const SELECT_JENIS = [
@@ -301,10 +301,6 @@ export default function SuratLAMPModal({isOpen, onOpenChange, employee}: SuratLA
   )
 }
 // -----------------------------------------------------------------------------------------------------
-function getJenis(value: string) {
-  return SELECT_JENIS?.find((item) => item.value === value)?.text;
-};
-
 function formatDate(dateStr: string) {
   const dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 

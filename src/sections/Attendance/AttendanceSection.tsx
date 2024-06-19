@@ -3,7 +3,7 @@ import AttendanceForm from "./AttendanceForm";
 import AttendanceSubmitted from "./AttendanceSubmitted";
 import axiosAuth from "../../config/axios";
 import { AddAttendanceBody, TodayEventsType } from "./types";
-import toast , {Toaster} from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 
 export default function AttendanceSection(){
