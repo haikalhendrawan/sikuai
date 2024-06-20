@@ -13,34 +13,38 @@ import toast from 'react-hot-toast';
 //-----------------------------------------------------------------------------------------------------------
 interface ValueType{
   nomorSurat: string,
+  nomorND: string,
+  penerbitSurat: string,
   selectPegawai: Key | null,
-  jurusan: string,
-  universitas: string,
+  selectAtasan: Key | null,
   startDate: DateValue | null,
   endDate: DateValue | null,
   tanggalSurat: DateValue | null, 
+  tanggalSuratRujukan: DateValue | null
 };
 
-interface SuratIzinBelajarModalTypes {
+interface SuratPMMJModalTypes {
   isOpen: boolean,
   onOpenChange: () => void,
   employee: EmployeeDataTypes[] | []
 };
 //-----------------------------------------------------------------------------------------------------------
-export default function SuratIzinBelajarModal({isOpen, onOpenChange, employee}: SuratIzinBelajarModalTypes) {
+export default function SuratSPMMJModal({isOpen, onOpenChange, employee}: SuratPMMJModalTypes) {
   const [value, setValue] = useState<ValueType>({
     nomorSurat:"",
+    nomorND: "",
+    penerbitSurat: "",
     selectPegawai: "",
-    jurusan: "",
-    universitas: "",
+    selectAtasan: "",
     startDate: null,
     endDate: null,
-    tanggalSurat: null, 
+    tanggalSurat: null,
+    tanggalSuratRujukan: null 
   });
 
   const generateDocument = async () => {
     try {
-      const content = await loadFilePromise(`${import.meta.env.VITE_API_URL}/template/templateNodeSIB.docx`);
+      const content = await loadFilePromise(`${import.meta.env.VITE_API_URL}/template/templateNodeSPMMJ.docx`);
       const zip = new PizZip(content);
       const doc = new Docxtemplater(zip, {
         paragraphLoop: true,
@@ -51,8 +55,6 @@ export default function SuratIzinBelajarModal({isOpen, onOpenChange, employee}: 
       doc.render({
         value: setData(value, employee)
       });
-      
-      console.log(setData(value, employee))
   
       const out = doc.getZip().generate({
         type: 'blob',
@@ -83,6 +85,13 @@ export default function SuratIzinBelajarModal({isOpen, onOpenChange, employee}: 
     }));
   };
 
+  const handleSelectChangeAtasan = (value: Key | null) => {
+    setValue(prev => ({
+      ...prev,
+      selectAtasan: value
+    }));
+  };
+
   const handleChangeStartDate = (e: DateValue) => {
     setValue(prev => ({
       ...prev,
@@ -97,6 +106,13 @@ export default function SuratIzinBelajarModal({isOpen, onOpenChange, employee}: 
     }));
   };
 
+  const handleChangeSuratRujukanDate = (e: DateValue) => {
+    setValue(prev => ({
+      ...prev,
+      tanggalSuratRujukan: e
+    }));
+  };
+
   const handleChangeTanggalSurat = (e: DateValue) => {
     setValue(prev => ({
       ...prev,
@@ -107,12 +123,14 @@ export default function SuratIzinBelajarModal({isOpen, onOpenChange, employee}: 
   const handleReset = () => {
     setValue({
       nomorSurat:"",
+      nomorND: "",
+      penerbitSurat: "",
       selectPegawai: "",
-      jurusan: "",
-      universitas: "",
+      selectAtasan: "",
       startDate: null,
       endDate: null,
-      tanggalSurat: null, 
+      tanggalSurat: null,
+      tanggalSuratRujukan: null 
     })
   };
 
@@ -149,25 +167,25 @@ export default function SuratIzinBelajarModal({isOpen, onOpenChange, employee}: 
               <ModalBody>
                 <Input
                   type="text"
-                  name="nomorSurat"
-                  label="Nomor Surat"
+                  name="nomorND"
+                  label="Nomor Surat SPMMJ"
                   classNames={{
                     input: [
                       "w-3/12",
                     ],          
                     inputWrapper: [
-                      "w-3/12"
+                      "w-4/12"
                     ]
                   }}
                   placeholder=" "
                   labelPlacement="outside"
-                  description="SI-25/WPB.03/2024  "
+                  description="Cth: SPMMJ-25/WPB.03/2024  "
                   variant="bordered"
-                  value={value.nomorSurat}
+                  value={value.nomorND}
                   onChange={handleChange}
                   startContent={
                     <div className="pointer-events-none flex items-center">
-                      <span className="text-default-400 text-small">SI-</span>
+                      <span className="text-default-400 text-small">SPMMJ-</span>
                     </div>
                   }
                   endContent={
@@ -176,6 +194,29 @@ export default function SuratIzinBelajarModal({isOpen, onOpenChange, employee}: 
                     </div>
                   }
                 />
+                <DatePicker 
+                    name="tanggalSurat"
+                    label="Tanggal Surat SPMMJ"
+                    variant="bordered"
+                    value={value.tanggalSurat} 
+                    className="max-w-xl"
+                    labelPlacement="outside"
+                    onChange={handleChangeTanggalSurat}
+                    popoverProps={{placement: "right-end"}}
+                />
+                <Autocomplete
+                  name="atasan"
+                  label="Penandatangan (Kepala Kanwil)"
+                  variant="bordered" 
+                  className="max-w-xl"
+                  size="md"
+                  labelPlacement="outside"
+                  placeholder="Pilih Kepala Kanwil atau yang mewakili"
+                  selectedKey={value.selectAtasan}
+                  onSelectionChange={handleSelectChangeAtasan}
+                >
+                  {employeeSelection}
+                </Autocomplete>
                 <Autocomplete
                   name="pegawai"
                   label="Pegawai"
@@ -192,7 +233,7 @@ export default function SuratIzinBelajarModal({isOpen, onOpenChange, employee}: 
                 <div className="grid grid-cols-2 gap-4 w-8/12">
                   <DatePicker 
                     name="startDate"
-                    label="Mulai"
+                    label="Tanggal Telah Menduduki Jabatan"
                     variant="bordered"
                     value={value.startDate} 
                     className="max-w-xl"
@@ -202,7 +243,7 @@ export default function SuratIzinBelajarModal({isOpen, onOpenChange, employee}: 
                   />
                   <DatePicker 
                     name="endDate"
-                    label="Selesai"
+                    label="Tanggal Masih Menduduki Jabatan"
                     variant="bordered"
                     value={value.endDate} 
                     className="max-w-xl"
@@ -212,39 +253,39 @@ export default function SuratIzinBelajarModal({isOpen, onOpenChange, employee}: 
                   />
                 </div>
                 <Input
-                  type="text"
-                  name="jurusan"
-                  label="Jurusan"
-                  className={"max-w-xl"}
-                  placeholder=" "
-                  labelPlacement="outside"
-                  description="Cth: Manajemen, Akuntansi"
-                  variant="bordered"
-                  value={value.jurusan}
-                  onChange={handleChange}
-                />
-                <Input
-                  type="text"
-                  name="universitas"
-                  label="Universitas"
-                  className={"max-w-xl"}
-                  placeholder=" "
-                  labelPlacement="outside"
-                  description="Cth: Universitas Terbuka"
-                  variant="bordered"
-                  value={value.universitas}
-                  onChange={handleChange}
-                />
-                <DatePicker 
-                    name="tanggalSurat"
-                    label="Tanggal Surat"
+                    type="text"
+                    name="nomorSurat"
+                    label="Nomor SK"
+                    placeholder=" "
+                    labelPlacement="outside"
+                    description="KEP-20/PB.1/2024"
                     variant="bordered"
-                    value={value.tanggalSurat} 
+                    className="max-w-xl"
+                    value={value.nomorSurat}
+                    onChange={handleChange}
+                />
+                  <DatePicker 
+                    name="tanggalSuratRujukan"
+                    label="Tanggal Surat Rujukan"
+                    variant="bordered"
+                    value={value.tanggalSuratRujukan} 
                     className="max-w-xl"
                     labelPlacement="outside"
-                    onChange={handleChangeTanggalSurat}
+                    onChange={handleChangeSuratRujukanDate}
                     popoverProps={{placement: "right-end"}}
                   />
+                  <Input
+                    type="text"
+                    name="penerbitSurat"
+                    label="Penerbit SK"
+                    placeholder=" "
+                    labelPlacement="outside"
+                    description="Cth: Direktur Jenderal Perbendaharaan, Menteri Keuangan"
+                    variant="bordered"
+                    className="max-w-xl"
+                    value={value.penerbitSurat}
+                    onChange={handleChange}
+                />
               </ModalBody>
               <ModalFooter className="mr-4">
                 <Button 
@@ -282,28 +323,48 @@ function formatDate(dateStr: string) {
   return `${day} ${month} ${year}`;
 };
 
-function getLamaWaktu(startDate: string, endDate: string) {
-  const bulanAwal = startDate.split(" ")[1];
-  const tahunAwal = startDate.split(" ")[2];
+function getJabatanLengkap(employee: EmployeeDataTypes | undefined) {
+  if(!employee) {
+    return ""
+  };
 
-  const bulanAkhir = endDate.split(" ")[1];
-  const tahunAkhir = endDate.split(" ")[2];
+  const eselon = employee.Eselon;
+  const unitKerja = employee.UnitKerja;
 
-  return `${bulanAwal} ${tahunAwal} s.d. ${bulanAkhir} ${tahunAkhir}`
-};
+  if(eselon.toLowerCase() === 'iv.a' || eselon.toLowerCase() === 'iv.b') {
+    if(unitKerja.toLowerCase() === 'kanwil djpbn prov. sumatera barat') {
+      return `${employee.Jabatan} ${employee.UnitEselonIII} ${getUnitKerja(employee.UnitEselonII)}`
+    }else{
+      return `${employee.Jabatan} ${getUnitKerja(employee.UnitEselonIII)}`
+    }
+  }
+
+  return employee.Jabatan
+}
 
 function setData(value: ValueType, employee: EmployeeDataTypes[]) {
   const selectedEmployee = employee.find((item) => item.No == value.selectPegawai);
-  return {
+  const selectedAtasan = employee.find((item) => item.No == value.selectAtasan);
+  const valueOutput = {
     nomorSurat: value.nomorSurat,
+    tanggalSurat: formatDate(value.tanggalSurat?.toString() || ""),
+    nomorND: value.nomorND,
+    tanggalSuratRujukan: formatDate(value.tanggalSuratRujukan?.toString() || ""),
+    penerbitSurat: value.penerbitSurat,
+    tanggalMulai: formatDate(value.startDate?.toString() || ""),
+    tanggalMasih: formatDate(value.endDate?.toString() || ""),
     pegawai: {
       ...selectedEmployee, 
       UnitEselonII: getUnitKerja(selectedEmployee?.UnitEselonII), 
-      NIP: selectedEmployee?.NIP.slice(1)
+      NIP: selectedEmployee?.NIP.slice(1),
+      JabatanLengkap: getJabatanLengkap(selectedEmployee)
     },
-    jurusan: value.jurusan,
-    universitas: value.universitas,
-    tanggal: getLamaWaktu(formatDate(value.startDate?.toString() || ""), formatDate(value.endDate?.toString() || "")),
-    tanggalSurat: formatDate(value.tanggalSurat?.toString() || "")
+    atasan: {
+      ...selectedAtasan, 
+      UnitEselonII: getUnitKerja(selectedAtasan?.UnitEselonII), 
+      NIP: selectedAtasan?.NIP.slice(1)
+    },
+    year: new Date().getFullYear()
   }
+  return valueOutput
 };

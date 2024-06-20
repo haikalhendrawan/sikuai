@@ -401,7 +401,7 @@ export default function SuratTugasKegModal({isOpen, onOpenChange, employee}: Sur
                 <Input
                   type="text"
                   name="judulND"
-                  label="Judul ND Usulan"
+                  label="Judul Surat Usulan"
                   className={!isHeaderAlternatif ? "max-w-xl" : "hidden"}
                   placeholder=" "
                   labelPlacement="outside"
