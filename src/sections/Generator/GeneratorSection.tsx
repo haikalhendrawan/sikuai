@@ -8,6 +8,7 @@ import SuratPlhModal from "./SuratPlhModal";
 import SuratLAMPModal from "./SuratLAMPModal";
 import SuratTugasDiklatModal from "./SuratTugasDiklatModal";
 import SuratTugasKegModal from "./SuratTugasKegModal";
+import SuratIzinBelajarModal from "./SuratIzinBelajarModal";
 //-----------------------------------------------------------------------------------------------------------
 export default function GeneratorSection() {
   const [employee, setEmployee] = useState<EmployeeDataTypes[] | []>([]);
@@ -19,6 +20,8 @@ export default function GeneratorSection() {
   const {isOpen: isOpen3, onOpenChange: onOpenChange3} = useDisclosure(); // surat tugas diklat modal
 
   const {isOpen: isOpen4, onOpenChange: onOpenChange4} = useDisclosure(); // surat tugas kegiatan modal
+
+  const {isOpen: isOpen5, onOpenChange: onOpenChange5} = useDisclosure(); // surat izin belajar modal
 
   useEffect(() => {
     async function getData(){
@@ -49,14 +52,14 @@ export default function GeneratorSection() {
     <>
       <div className="w-full grid grid-cols-4 max-w-[900px] gap-8 p-4">
         <GeneratorCard 
-          onOpenChange={onOpenChange} 
-          title="Surat Perintah (Plh/Plt)" 
-          imageUrl="/surat-perintah.png" 
-        />
-        <GeneratorCard 
           onOpenChange={onOpenChange2} 
           title="Surat Lupa Absen" 
           imageUrl="/surat-LAMP.png" 
+        />
+        <GeneratorCard 
+          onOpenChange={onOpenChange} 
+          title="Surat Perintah (Plh/Plt)" 
+          imageUrl="/surat-perintah.png" 
         />
         <GeneratorCard 
           onOpenChange={onOpenChange3} 
@@ -68,6 +71,12 @@ export default function GeneratorSection() {
           title="Surat Tugas (ST) Kegiatan" 
           imageUrl="/surat-tugas-diklat.png" 
         />
+
+        <GeneratorCard 
+          onOpenChange={onOpenChange5} 
+          title="Surat Izin Belajar" 
+          imageUrl="/surat-SIB.png" 
+        />
       </div>
 
       <SuratPlhModal employee={employee} isOpen={isOpen} onOpenChange={onOpenChange} />
@@ -77,6 +86,8 @@ export default function GeneratorSection() {
       <SuratTugasDiklatModal employee={employee} isOpen={isOpen3} onOpenChange={onOpenChange3} />
 
       <SuratTugasKegModal employee={employee} isOpen={isOpen4} onOpenChange={onOpenChange4} />
+
+      <SuratIzinBelajarModal employee={employee} isOpen={isOpen5} onOpenChange={onOpenChange5} />
       
       <Toaster />
     </>

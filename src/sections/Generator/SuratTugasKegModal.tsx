@@ -39,12 +39,27 @@ const SELECT_UNIT = [
   {label: "KPPN Solok", value: "8", text: "Kepala Kantor Pelayanan Perbendaharaan Negara Solok"},
   {label: "KPPN Lubuk Sikaping", value: "9", text: "Kepala Kantor Pelayanan Perbendaharaan Negara Sijunjung"},
   {label: "KPPN Painan", value: "10", text: "Kepala Kantor Pelayanan Perbendaharaan Negara Painan"},
+  {label: "Lainnya", value: "11", text: "lainnya"},
+];
+
+const SELECT_SURAT = [
+  {label: "Nota Dinas", value: "1", text: "Nota Dinas"},
+  {label: "Surat", value: "2", text: "Surat"},
+  {label: "Undangan", value: "3", text: "Surat Undangan"},
+];
+
+const SELECT_KEGIATAN = [
+  {label: "Melaksanakan (sebagai tim/panitia)", value: "1", text: "melaksanakan"},
+  {label: "Mengikuti (sebagai peserta)", value: "2", text: "mengikuti"},
 ];
 
 interface ValueType{
   namaKegiatan: string,
+  jenisKegiatan: string,
   nomorND: string,
   pengirimND: string,
+  namaPengirimND: string,
+  jenisSurat: string,
   judulND: string,
   headerAlternatif: string,
   startDate: DateValue | null,
@@ -64,9 +79,12 @@ export default function SuratTugasKegModal({isOpen, onOpenChange, employee}: Sur
 
   const [value, setValue] = useState<ValueType>({
     namaKegiatan: '',
+    jenisKegiatan: '',
     nomorND: '',
     pengirimND: '',
+    namaPengirimND: '',
     judulND: '',
+    jenisSurat: '',
     headerAlternatif: '',
     startDate: null,
     endDate: null,
@@ -203,9 +221,12 @@ export default function SuratTugasKegModal({isOpen, onOpenChange, employee}: Sur
   const handleReset = () => {
     setValue({
       namaKegiatan: '',
+      jenisKegiatan: '',
       nomorND: '',
       pengirimND: '',
+      namaPengirimND: '',
       judulND: '',
+      jenisSurat: '',
       headerAlternatif: '',
       startDate: null,
       endDate: null,
@@ -289,55 +310,94 @@ export default function SuratTugasKegModal({isOpen, onOpenChange, employee}: Sur
                     </div>
                   }
                 />
+                <Select
+                  name="jenisKegiatan"
+                  label="Jenis Kegiatan"
+                  variant="bordered" 
+                  className={"max-w-xl"}
+                  placeholder=" "
+                  labelPlacement="outside"
+                  value={value.jenisKegiatan}
+                  onChange={(e) => handleChange(e)}
+                  description="Pilih jenis kepesertaan"
+                >
+                  {SELECT_KEGIATAN.map((row) => (
+                    <SelectItem key={row.value} value={row.value}>
+                      {row.label}
+                    </SelectItem>
+                  ))}
+                </Select>
+                <div className="flex flex-row gap-2 max-w-xl mt-1 mb-2">
+                  <Switch name='isTTE' size="sm" checked={isHeaderAlternatif} onValueChange={setIsHeaderAlternatif}>
+                    Header Alternatif 
+                  </Switch>
+                  <Popover key={0} placement="right-start" backdrop="opaque">
+                    <PopoverTrigger>
+                      <Iconify icon="solar:question-circle-bold"/>
+                    </PopoverTrigger>
+                    {content}
+                  </Popover>
+                </div>
                 <div className="grid grid-cols-3 gap-4 max-w-xl">
                   <Input
                     type="text"
                     name="nomorND"
-                    label="Nomor ND Usulan"
-                    placeholder=""
+                    label="Nomor Surat Rujukan"
+                    placeholder=" "
                     labelPlacement="outside"
                     description="Cth: ND-22/PB.1/2024"
                     variant="bordered"
-                    startContent={
-                      <div className="pointer-events-none flex items-center">
-                        <span className="text-default-400 text-small">ND-</span>
-                      </div>
-                    }
                     className={!isHeaderAlternatif ? "col-span-1" : "hidden"}
                     value={value.nomorND}
                     onChange={handleChange}
                   />
                   <Select
-                    name="pengirimND"
-                    label="Pengirim ND"
+                    name="jenisSurat"
+                    label="Jenis Surat"
                     variant="bordered" 
-                    className="col-span-2"
+                    className={!isHeaderAlternatif ? "col-span-2" : "hidden"}
                     placeholder=" "
                     labelPlacement="outside"
-                    selectedKeys={value.pengirimND}
+                    value={value.jenisSurat}
+                    onChange={(e) => handleChange(e)}
+                    description="Berupa Nota Dinas/Surat/Undangan"
+                  >
+                    {SELECT_SURAT.map((row) => (
+                      <SelectItem key={row.value} value={row.value}>
+                        {row.label}
+                      </SelectItem>
+                    ))}
+                  </Select>
+                </div>
+                <Select
+                    name="pengirimND"
+                    label="Pengirim Surat Rujukan"
+                    variant="bordered" 
+                    className={!isHeaderAlternatif ? "max-w-xl" : "hidden"}
+                    placeholder=" "
+                    labelPlacement="outside"
                     value={value.pengirimND}
                     onChange={(e) => handleChange(e)}
-                    description="Bidang/KPPN"
+                    description="Bidang/KPPN/Eksternal"
                   >
                     {SELECT_UNIT.map((row) => (
                       <SelectItem key={row.value} value={row.value}>
                         {row.label}
                       </SelectItem>
                     ))}
-                  </Select>
-                  {/* <Input
-                    type="text"
-                    name="pengirimND"
-                    label="Pengirim ND"
-                    placeholder=" "
-                    labelPlacement="outside"
-                    description="Unit pengirim ND usulan"
-                    variant="bordered"
-                    className={!isHeaderAlternatif ? "col-span-2" : "hidden"}
-                    value={value.pengirimND}
-                    onChange={handleChange}
-                  /> */}
-                </div>
+                </Select>
+                <Input
+                  type="text"
+                  name="namaPengirimND"
+                  label="Unit Pengirim Surat Rujukan"
+                  className={value.pengirimND==="11" && !isHeaderAlternatif ? "max-w-xl" : "hidden"}
+                  placeholder=" "
+                  labelPlacement="outside"
+                  description="Cth: BPJS Kesehatan Kota Padang, Satker xxx"
+                  variant="bordered"
+                  value={value.namaPengirimND}
+                  onChange={handleChange}
+                />
                 <Input
                   type="text"
                   name="judulND"
@@ -350,17 +410,6 @@ export default function SuratTugasKegModal({isOpen, onOpenChange, employee}: Sur
                   value={value.judulND}
                   onChange={handleChange}
                 />
-                <div className="flex flex-row gap-2 max-w-xl mt-1 mb-2">
-                  <Switch name='isTTE' size="sm" checked={isHeaderAlternatif} onValueChange={setIsHeaderAlternatif}>
-                    Header Alternatif 
-                  </Switch>
-                  <Popover key={0} placement="right-start" backdrop="opaque">
-                    <PopoverTrigger>
-                      <Iconify icon="solar:question-circle-bold"/>
-                    </PopoverTrigger>
-                    {content}
-                  </Popover>
-                </div>
                 <Input
                   type="text"
                   name="headerAlternatif"
@@ -498,63 +547,27 @@ export default function SuratTugasKegModal({isOpen, onOpenChange, employee}: Sur
 
 // -----------------------------------------------------------------------------------------------------
 function setData(isHeaderAlternatif: boolean, value: ValueType) {
-  if (isHeaderAlternatif && value.bebanDIPA==="2") {
-    return {
-      isHeaderAlternatif: isHeaderAlternatif,
-      year: new Date().getFullYear(),
-      isMoreThan4: value.peserta.length > 4,
-      headerAlternatif: value.headerAlternatif,
-      namaKegiatan: value.namaKegiatan,
-      nomorND: value.nomorND,
-      pengirimND: SELECT_UNIT.find((row) => row.value === value.pengirimND)?.text,
-      judulND: value.judulND,
-      startDate: formatDate(value.startDate?.toString() || ""),
-      endDate: formatDate(value.endDate?.toString() || ""),
-      tanggal:  getLamaWaktu(formatDate(value.startDate?.toString() || ""), formatDate(value.endDate?.toString() || "")),
-      kota: value.kota,
-      tempat: value.tempat,
-      unitPembebanan: value.unitPembebanan,
-      peserta: value.peserta,
-    }
-  }
-  if (isHeaderAlternatif) {
-    return {
-      isHeaderAlternatif: isHeaderAlternatif,
-      year: new Date().getFullYear(),
-      isMoreThan4: value.peserta.length > 4,
-      headerAlternatif: value.headerAlternatif,
-      namaKegiatan: value.namaKegiatan,
-      nomorND: value.nomorND,
-      pengirimND: SELECT_UNIT.find((row) => row.value === value.pengirimND)?.text,
-      judulND: value.judulND,
-      startDate: formatDate(value.startDate?.toString() || ""),
-      endDate: formatDate(value.endDate?.toString() || ""),
-      tanggal:  getLamaWaktu(formatDate(value.startDate?.toString() || ""), formatDate(value.endDate?.toString() || "")),
-      kota: value.kota,
-      tempat: value.tempat,
-      unitPembebanan: SELECT_PEMBEBANAN.find(item => item.value===value.bebanDIPA)?.text,
-      peserta: value.peserta,
-    }
-  }
-
   return {
     isHeaderAlternatif: isHeaderAlternatif,
     year: new Date().getFullYear(),
     isMoreThan4: value.peserta.length > 4,
     headerAlternatif: value.headerAlternatif,
     namaKegiatan: value.namaKegiatan,
+    jenisKegiatan: SELECT_KEGIATAN.find(item => item.value===value.jenisKegiatan)?.text,
+    sebutanLampiran: value.jenisKegiatan==="1"?"Tim":"Peserta",
     nomorND: value.nomorND,
-    pengirimND: SELECT_UNIT.find((row) => row.value === value.pengirimND)?.text,
+    jenisSurat: SELECT_SURAT.find(item => item.value===value.jenisSurat)?.text,
+    pengirimND: value.pengirimND==="11"?value.namaPengirimND:SELECT_UNIT.find((row) => row.value === value.pengirimND)?.text,
     judulND: value.judulND,
     startDate: formatDate(value.startDate?.toString() || ""),
     endDate: formatDate(value.endDate?.toString() || ""),
     tanggal:  getLamaWaktu(formatDate(value.startDate?.toString() || ""), formatDate(value.endDate?.toString() || "")),
     kota: value.kota,
     tempat: value.tempat,
-    unitPembebanan: SELECT_PEMBEBANAN.find(item => item.value===value.bebanDIPA)?.text,
+    unitPembebanan: value.bebanDIPA==="2"?value.unitPembebanan:SELECT_PEMBEBANAN.find(item => item.value===value.bebanDIPA)?.text,
     peserta: value.peserta,
   }
-}
+};
 
 function getJabatan(emp: EmployeeDataTypes[], v: Key | null): string {
   if(emp.length< 0 || v===0) return "";
@@ -614,9 +627,6 @@ function getLamaWaktu(startDate: string, endDate: string) {
 
 function validateInput(value: ValueType, isHeaderAlternatif: boolean) {
   if(value.namaKegiatan === "" 
-    || value.nomorND === "" 
-    || value.pengirimND === "" 
-    || value.judulND === "" 
     || value.startDate === null
     || value.endDate === null
     || value.peserta.length===0
@@ -630,7 +640,7 @@ function validateInput(value: ValueType, isHeaderAlternatif: boolean) {
     if(value.headerAlternatif === "") {
       return false
     }
-  }
+  };
 
   return true
 };

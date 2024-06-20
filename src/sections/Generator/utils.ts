@@ -22,6 +22,8 @@ export function getUnitKerja(unit: string | undefined){
   if(!unit){
     return ""
   };
+
+  console.log(unit)
   
   return unit
   .replace("Kanwil DJPBN Prov. Sumatera Barat", "Kantor Wilayah Direktorat Jenderal Perbendaharaan Provinsi Sumatera Barat")
