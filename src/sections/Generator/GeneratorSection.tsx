@@ -10,6 +10,7 @@ import SuratTugasDiklatModal from "./SuratTugasDiklatModal";
 import SuratTugasKegModal from "./SuratTugasKegModal";
 import SuratIzinBelajarModal from "./SuratIzinBelajarModal";
 import SuratSPMMJModal from "./SuratSPMMJModal";
+import SuratSPMTModal from "./SuratSPMTModal";
 //-----------------------------------------------------------------------------------------------------------
 export default function GeneratorSection() {
   const [employee, setEmployee] = useState<EmployeeDataTypes[] | []>([]);
@@ -25,6 +26,8 @@ export default function GeneratorSection() {
   const {isOpen: isOpen5, onOpenChange: onOpenChange5} = useDisclosure(); // surat izin belajar modal
 
   const {isOpen: isOpen6, onOpenChange: onOpenChange6} = useDisclosure(); // surat PMMJ modal
+
+  const {isOpen: isOpen7, onOpenChange: onOpenChange7} = useDisclosure(); // surat SPMT modal
 
   useEffect(() => {
     async function getData(){
@@ -86,6 +89,12 @@ export default function GeneratorSection() {
           title="Surat SPMMJ" 
           imageUrl="/surat-SIB.png" 
         />
+
+        <GeneratorCard 
+          onOpenChange={onOpenChange7} 
+          title="Surat SPMT" 
+          imageUrl="/surat-SIB.png" 
+        />
       </div>
 
       <SuratPlhModal employee={employee} isOpen={isOpen} onOpenChange={onOpenChange} />
@@ -99,6 +108,8 @@ export default function GeneratorSection() {
       <SuratIzinBelajarModal employee={employee} isOpen={isOpen5} onOpenChange={onOpenChange5} />
 
       <SuratSPMMJModal employee={employee} isOpen={isOpen6} onOpenChange={onOpenChange6} />
+
+      <SuratSPMTModal employee={employee} isOpen={isOpen7} onOpenChange={onOpenChange7} />
       
       <Toaster />
     </>

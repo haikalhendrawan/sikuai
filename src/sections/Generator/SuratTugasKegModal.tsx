@@ -95,7 +95,7 @@ export default function SuratTugasKegModal({isOpen, onOpenChange, employee}: Sur
     peserta: []
   });
 
-  const generateDocument = async () => {
+  const generateSTKegiatan = async () => {
     try {
       const content = await loadFilePromise(`${import.meta.env.VITE_API_URL}/template/templateNodeSTKegiatan.docx`);
       const zip = new PizZip(content);
@@ -123,7 +123,7 @@ export default function SuratTugasKegModal({isOpen, onOpenChange, employee}: Sur
         mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       });
   
-      saveAs(out, 'output.docx');
+      saveAs(out, `stKegiatan_${new Date().getTime()}.docx`);
     } catch(err: any) {
       console.error(JSON.stringify(err.message));
       toast.error(JSON.stringify(err.message), {
@@ -133,7 +133,7 @@ export default function SuratTugasKegModal({isOpen, onOpenChange, employee}: Sur
     }
   };
 
-  const generateLampiran = async () => {
+  const generateLampiranKegiatan = async () => {
     try {
       const content = await loadFilePromise(`${import.meta.env.VITE_API_URL}/template/lampiranNodeSTKegiatan.docx`);
       const zip = new PizZip(content);
@@ -160,7 +160,7 @@ export default function SuratTugasKegModal({isOpen, onOpenChange, employee}: Sur
         mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       });
   
-      saveAs(out, 'output.docx');
+      saveAs(out, `lampiranSTKegiatan_${new Date().getTime()}.docx`);
     } catch(err: any) {
       console.error(err.message);
       toast.error(err.message, {
@@ -519,13 +519,13 @@ export default function SuratTugasKegModal({isOpen, onOpenChange, employee}: Sur
               <ModalFooter className="mr-4">
                 <Button 
                   className='bg-black text-white' 
-                  onClick={generateDocument} 
+                  onClick={generateSTKegiatan} 
                 >
                   Generate ST
                 </Button>
                 <Button 
                   className={`bg-black text-white ${value.peserta.length>4?"block":"hidden"}`}
-                  onClick={generateLampiran} 
+                  onClick={generateLampiranKegiatan} 
                 >
                   Generate Lampiran
                 </Button>

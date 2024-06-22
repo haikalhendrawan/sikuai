@@ -79,7 +79,7 @@ export default function SuratLAMPModal({isOpen, onOpenChange, employee}: SuratLA
     }));
   };
 
-  const generateDocument = async () => {
+  const generateLAMP = async () => {
     try {
       const content = await loadFilePromise(`${import.meta.env.VITE_API_URL}/template/templateNodeLAMP.docx`);
       const zip = new PizZip(content);
@@ -100,7 +100,7 @@ export default function SuratLAMPModal({isOpen, onOpenChange, employee}: SuratLA
         mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       });
   
-      saveAs(out, 'output.docx');
+      saveAs(out, `lupaAbsen_${new Date().getTime()}.docx`);
     } catch(err: any) {
       console.error(err.message);
       toast.error(err.message, {
@@ -281,7 +281,7 @@ export default function SuratLAMPModal({isOpen, onOpenChange, employee}: SuratLA
               <ModalFooter className="mr-4">
                 <Button 
                   className='bg-black text-white' 
-                  onClick={generateDocument} 
+                  onClick={generateLAMP} 
                 >
                   Generate
                 </Button>

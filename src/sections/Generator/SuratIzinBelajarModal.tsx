@@ -38,7 +38,7 @@ export default function SuratIzinBelajarModal({isOpen, onOpenChange, employee}: 
     tanggalSurat: null, 
   });
 
-  const generateDocument = async () => {
+  const generateSIB = async () => {
     try {
       const content = await loadFilePromise(`${import.meta.env.VITE_API_URL}/template/templateNodeSIB.docx`);
       const zip = new PizZip(content);
@@ -59,7 +59,7 @@ export default function SuratIzinBelajarModal({isOpen, onOpenChange, employee}: 
         mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       });
   
-      saveAs(out, 'output.docx');
+      saveAs(out, `izinBelajar_${new Date().getTime()}.docx`);
     } catch(err: any) {
       console.error(err.message);
       toast.error(err.message, {
@@ -249,7 +249,7 @@ export default function SuratIzinBelajarModal({isOpen, onOpenChange, employee}: 
               <ModalFooter className="mr-4">
                 <Button 
                   className='bg-black text-white' 
-                  onClick={generateDocument} 
+                  onClick={generateSIB} 
                 >
                   Generate
                 </Button>

@@ -70,7 +70,7 @@ export default function SuratTugasDiklatModal({isOpen, onOpenChange, employee}: 
     peserta: []
   });
 
-  const generateDocument = async () => {
+  const generateSTDiklat = async () => {
     try {
       const content = await loadFilePromise(`${import.meta.env.VITE_API_URL}/template/templateNodeSTDiklat.docx`);
       const zip = new PizZip(content);
@@ -97,7 +97,7 @@ export default function SuratTugasDiklatModal({isOpen, onOpenChange, employee}: 
         mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       });
   
-      saveAs(out, 'output.docx');
+      saveAs(out, `stDiklat_${new Date().getTime()}.docx`);
     } catch(err: any) {
       console.error(err);
       toast.error(err.message, {
@@ -107,7 +107,7 @@ export default function SuratTugasDiklatModal({isOpen, onOpenChange, employee}: 
     }
   };
 
-  const generateLampiran = async () => {
+  const generateLampiranDiklat = async () => {
     try {
       const content = await loadFilePromise(`${import.meta.env.VITE_API_URL}/template/lampiranNodeSTDiklat.docx`);
       const zip = new PizZip(content);
@@ -134,7 +134,7 @@ export default function SuratTugasDiklatModal({isOpen, onOpenChange, employee}: 
         mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       });
   
-      saveAs(out, 'output.docx');
+      saveAs(out, `lampiranSTDiklat_${new Date().getTime()}.docx`);
     } catch(err: any) {
       console.error(err.message);
       toast.error(err.message, {
@@ -427,13 +427,13 @@ export default function SuratTugasDiklatModal({isOpen, onOpenChange, employee}: 
               <ModalFooter className="mr-4">
                 <Button 
                   className='bg-black text-white' 
-                  onClick={generateDocument} 
+                  onClick={generateSTDiklat} 
                 >
                   Generate ST
                 </Button>
                 <Button 
                   className={`bg-black text-white ${value.peserta.length>4?"block":"hidden"}`}
-                  onClick={generateLampiran} 
+                  onClick={generateLampiranDiklat} 
                 >
                   Generate Lampiran
                 </Button>

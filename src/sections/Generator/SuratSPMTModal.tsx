@@ -1,6 +1,6 @@
 import {useState, useMemo} from "react";
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, DateValue, Input,  
-        Button, DatePicker, Avatar, Autocomplete, AutocompleteItem} from "@nextui-org/react";
+        Button, DatePicker, Avatar, Autocomplete, AutocompleteItem, Select, SelectItem} from "@nextui-org/react";
 import { Key } from '@react-types/shared';
 import { EmployeeDataTypes } from "./types";
 import Docxtemplater from 'docxtemplater';
@@ -16,6 +16,11 @@ interface ValueType{
   nomorND: string,
   penerbitSurat: string,
   selectPegawai: Key | null,
+  jabatan: string,
+  eselonIII: string,
+  eselonIIIText: string,
+  eselonIV: string,
+  eselonIVText: string,
   selectAtasan: Key | null,
   startDate: DateValue | null,
   endDate: DateValue | null,
@@ -23,18 +28,31 @@ interface ValueType{
   tanggalSuratRujukan: DateValue | null
 };
 
-interface SuratPMMJModalTypes {
+interface SuratSPMTModalTypes {
   isOpen: boolean,
   onOpenChange: () => void,
   employee: EmployeeDataTypes[] | []
 };
+
+const JABATAN_SELECTION = [
+  {label: "Kepala Bidang", value: "1", text: 'Kepala'},
+  {label: "Kepala Seksi", value: "2", text: 'Kepala'},
+  {label: "Pelaksana", value: "3", text: 'Pelaksana'},
+];
+
+
 //-----------------------------------------------------------------------------------------------------------
-export default function SuratSPMMJModal({isOpen, onOpenChange, employee}: SuratPMMJModalTypes) {
+export default function SuratSPMTModal({isOpen, onOpenChange, employee}: SuratSPMTModalTypes) {
   const [value, setValue] = useState<ValueType>({
     nomorSurat:"",
     nomorND: "",
     penerbitSurat: "",
     selectPegawai: "",
+    jabatan: "",
+    eselonIII: "",
+    eselonIIIText: "",
+    eselonIV: "",
+    eselonIVText: "",
     selectAtasan: "",
     startDate: null,
     endDate: null,
@@ -42,9 +60,22 @@ export default function SuratSPMMJModal({isOpen, onOpenChange, employee}: SuratP
     tanggalSuratRujukan: null 
   });
 
-  const generateSPMMJ = async () => {
+  const ESELONIII_SELECTION = (employee : EmployeeDataTypes[]): string[] => {
+    const EselonIII = employee.filter(emp => emp.UnitEselonIII).map(emp => emp.UnitEselonIII);
+    const uniqueEsIII = new Set(EselonIII);
+    return [...uniqueEsIII];
+  };
+  
+  const ESELONIV_SELECTION = (esIII: string, employee : EmployeeDataTypes[]): string[] => {
+    const availableEselonIV = employee.filter(emp => emp.UnitEselonIII == esIII && emp.UnitEselonIV!==null);
+    const eselonIV = availableEselonIV.map(emp => emp.UnitEselonIV);
+    const uniqueEsIV = new Set(eselonIV);
+    return [...uniqueEsIV];
+  };
+
+  const generateSPMT = async () => {
     try {
-      const content = await loadFilePromise(`${import.meta.env.VITE_API_URL}/template/templateNodeSPMMJ.docx`);
+      const content = await loadFilePromise(`${import.meta.env.VITE_API_URL}/template/templateNodeSPMT.docx`);
       const zip = new PizZip(content);
       const doc = new Docxtemplater(zip, {
         paragraphLoop: true,
@@ -61,7 +92,7 @@ export default function SuratSPMMJModal({isOpen, onOpenChange, employee}: SuratP
         mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       });
   
-      saveAs(out, `SPMMJ_${new Date().getTime()}.docx`);
+      saveAs(out, `SPMT_${new Date().getTime()}.docx`);
     } catch(err: any) {
       console.error(err.message);
       toast.error(err.message, {
@@ -92,17 +123,41 @@ export default function SuratSPMMJModal({isOpen, onOpenChange, employee}: SuratP
     }));
   };
 
+  const handleChangeJabatan = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setValue(prev => ({
+      ...prev,
+      jabatan: e.target.value
+    }));
+  };
+
+  const handleChangeEselonIII = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedValue = e.target.value;
+    const eselonIIISelection = ESELONIII_SELECTION(employee);
+    const selectedText = eselonIIISelection.find((es, i) => i === parseInt(selectedValue)) || '';
+  
+    setValue(prev => ({
+      ...prev,
+      eselonIII: selectedValue,
+      eselonIIIText: selectedText
+    }));
+  };
+
+  const handleChangeEselonIV = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedValue = e.target.value;
+    const eselonIVSelection = ESELONIV_SELECTION(value.eselonIIIText, employee);
+    const selectedText = eselonIVSelection.find((es, i) => i === parseInt(selectedValue)) || '';
+
+    setValue(prev => ({
+      ...prev,
+      eselonIV: selectedValue,
+      eselonIVText: selectedText
+    }));
+  };  
+
   const handleChangeStartDate = (e: DateValue) => {
     setValue(prev => ({
       ...prev,
       startDate: e
-    }));
-  };
-
-  const handleChangeEndDate = (e: DateValue) => {
-    setValue(prev => ({
-      ...prev,
-      endDate: e
     }));
   };
 
@@ -126,6 +181,11 @@ export default function SuratSPMMJModal({isOpen, onOpenChange, employee}: SuratP
       nomorND: "",
       penerbitSurat: "",
       selectPegawai: "",
+      jabatan: "",
+      eselonIII: "",
+      eselonIIIText: "",
+      eselonIV: "",
+      eselonIVText: "",
       selectAtasan: "",
       startDate: null,
       endDate: null,
@@ -149,6 +209,36 @@ export default function SuratSPMMJModal({isOpen, onOpenChange, employee}: SuratP
     [employee]
   );
 
+  const jabatanSelection = useMemo(() => 
+    JABATAN_SELECTION.map((item: any, index: number) => (
+      <SelectItem key={item.value}>
+        {item.label}
+      </SelectItem>
+    )), 
+    [employee]  
+  );
+
+  const eselonIIISelection = useMemo(() => 
+    ESELONIII_SELECTION(employee).map((item: any, index: number) => (
+      <SelectItem key={index}>
+        {item}
+      </SelectItem>
+    )), 
+    [employee]
+  );
+
+  const eselonIVSelection = useMemo(() =>
+    ESELONIV_SELECTION(value.eselonIIIText, employee).map((item: any, index: number) => (
+      <SelectItem key={index} textValue={item}>
+        <div className="flex gap-2 items-center">
+          <div className="flex flex-col">
+            <span className="text-small">{item}</span>
+          </div>
+        </div>
+      </SelectItem>
+    )),
+    [value.eselonIIIText]
+  );
 
   return (
   <>
@@ -163,12 +253,12 @@ export default function SuratSPMMJModal({isOpen, onOpenChange, employee}: SuratP
         <ModalContent>
           {() => (
             <>
-              <ModalHeader className="flex flex-col gap-2">Surat Masih Menduduki Jabatan</ModalHeader>
+              <ModalHeader className="flex flex-col gap-2">Surat Pernyataan Melaksanakan Tugas</ModalHeader>
               <ModalBody>
                 <Input
                   type="text"
                   name="nomorND"
-                  label="Nomor Surat SPMMJ"
+                  label="Nomor Surat SPMT"
                   classNames={{
                     input: [
                       "w-3/12",
@@ -179,13 +269,13 @@ export default function SuratSPMMJModal({isOpen, onOpenChange, employee}: SuratP
                   }}
                   placeholder=" "
                   labelPlacement="outside"
-                  description="Cth: SPMMJ-025/WPB.03/2024, SPMMJ-08/WPB.03/2024"
+                  description="Cth: SPMT-025/WPB.03/2024, SPMT-05/WPB.03/2024"
                   variant="bordered"
                   value={value.nomorND}
                   onChange={handleChange}
                   startContent={
                     <div className="pointer-events-none flex items-center">
-                      <span className="text-default-400 text-small">SPMMJ-</span>
+                      <span className="text-default-400 text-small">SPMT-</span>
                     </div>
                   }
                   endContent={
@@ -195,14 +285,14 @@ export default function SuratSPMMJModal({isOpen, onOpenChange, employee}: SuratP
                   }
                 />
                 <DatePicker 
-                    name="tanggalSurat"
-                    label="Tanggal Surat SPMMJ"
-                    variant="bordered"
-                    value={value.tanggalSurat} 
-                    className="max-w-xl"
-                    labelPlacement="outside"
-                    onChange={handleChangeTanggalSurat}
-                    popoverProps={{placement: "right-end"}}
+                  name="tanggalSurat"
+                  label="Tanggal Surat SPMT"
+                  variant="bordered"
+                  value={value.tanggalSurat} 
+                  className="max-w-xl"
+                  labelPlacement="outside"
+                  onChange={handleChangeTanggalSurat}
+                  popoverProps={{placement: "right-end"}}
                 />
                 <Autocomplete
                   name="atasan"
@@ -230,10 +320,47 @@ export default function SuratSPMMJModal({isOpen, onOpenChange, employee}: SuratP
                 >
                   {employeeSelection}
                 </Autocomplete>
+                <Select
+                  name="jabatan"
+                  label="Jabatan Baru"
+                  variant="bordered" 
+                  className="max-w-xl"
+                  labelPlacement="outside"
+                  placeholder="Pilih jenis"
+                  value={value.jabatan}
+                  onChange={handleChangeJabatan}
+                >
+                  {jabatanSelection}
+                </Select>
+                <Select
+                  name="eselonIII"
+                  label="Es III"
+                  variant="bordered" 
+                  className="max-w-xl"
+                  labelPlacement="outside"
+                  value={value.eselonIII}
+                  onChange={handleChangeEselonIII}
+                  multiple={false}
+                >
+                  {eselonIIISelection}
+                </Select>
+                <Select
+                  name="eselonIV"
+                  label="Es IV"
+                  variant="bordered" 
+                  className={value.jabatan === "1" ? "hidden" : "max-w-xl"}
+                  labelPlacement="outside"
+                  placeholder="Pilih jenis"
+                  value={value.eselonIV}
+                  onChange={handleChangeEselonIV}
+                  multiple={false}
+                >
+                  {eselonIVSelection}
+                </Select>
                 <div className="grid grid-cols-2 gap-4 w-8/12">
                   <DatePicker 
                     name="startDate"
-                    label="Tanggal Telah Menduduki Jabatan"
+                    label="Tanggal Terhitung Mulai"
                     variant="bordered"
                     value={value.startDate} 
                     className="max-w-xl"
@@ -241,56 +368,46 @@ export default function SuratSPMMJModal({isOpen, onOpenChange, employee}: SuratP
                     onChange={handleChangeStartDate}
                     popoverProps={{placement: "right-end"}}
                   />
-                  <DatePicker 
-                    name="endDate"
-                    label="Tanggal Masih Menduduki Jabatan"
-                    variant="bordered"
-                    value={value.endDate} 
-                    className="max-w-xl"
-                    labelPlacement="outside"
-                    onChange={handleChangeEndDate}
-                    popoverProps={{placement: "right-end"}}
-                  />
                 </div>
                 <Input
-                    type="text"
-                    name="nomorSurat"
-                    label="Nomor SK"
-                    placeholder=" "
-                    labelPlacement="outside"
-                    description="KEP-20/PB.1/2024"
-                    variant="bordered"
-                    className="max-w-xl"
-                    value={value.nomorSurat}
-                    onChange={handleChange}
+                  type="text"
+                  name="nomorSurat"
+                  label="Nomor SK"
+                  placeholder=" "
+                  labelPlacement="outside"
+                  description="KEP-20/PB.1/2024"
+                  variant="bordered"
+                  className="max-w-xl"
+                  value={value.nomorSurat}
+                  onChange={handleChange}
                 />
                   <DatePicker 
-                    name="tanggalSuratRujukan"
-                    label="Tanggal SK"
-                    variant="bordered"
-                    value={value.tanggalSuratRujukan} 
-                    className="max-w-xl"
-                    labelPlacement="outside"
-                    onChange={handleChangeSuratRujukanDate}
-                    popoverProps={{placement: "right-end"}}
+                  name="tanggalSuratRujukan"
+                  label="Tanggal SK"
+                  variant="bordered"
+                  value={value.tanggalSuratRujukan} 
+                  className="max-w-xl"
+                  labelPlacement="outside"
+                  onChange={handleChangeSuratRujukanDate}
+                  popoverProps={{placement: "right-end"}}
                   />
                   <Input
-                    type="text"
-                    name="penerbitSurat"
-                    label="Penerbit SK"
-                    placeholder=" "
-                    labelPlacement="outside"
-                    description="Cth: Direktur Jenderal Perbendaharaan, Menteri Keuangan"
-                    variant="bordered"
-                    className="max-w-xl"
-                    value={value.penerbitSurat}
-                    onChange={handleChange}
+                  type="text"
+                  name="penerbitSurat"
+                  label="Penerbit SK"
+                  placeholder=" "
+                  labelPlacement="outside"
+                  description="Cth: Direktur Jenderal Perbendaharaan, Menteri Keuangan"
+                  variant="bordered"
+                  className="max-w-xl"
+                  value={value.penerbitSurat}
+                  onChange={handleChange}
                 />
               </ModalBody>
               <ModalFooter className="mr-4">
                 <Button 
                   className='bg-black text-white' 
-                  onClick={generateSPMMJ} 
+                  onClick={generateSPMT} 
                 >
                   Generate
                 </Button>
@@ -323,23 +440,25 @@ function formatDate(dateStr: string) {
   return `${day} ${month} ${year}`;
 };
 
-function getJabatanLengkap(employee: EmployeeDataTypes | undefined) {
+function getJabatanLengkap(employee: EmployeeDataTypes | undefined, value: ValueType) {
   if(!employee) {
     return ""
   };
 
-  const eselon = employee.Eselon;
-  const unitKerja = employee.UnitKerja;
+  const isKPPN = value.eselonIIIText.split(" ")[0]==="KPPN"?null:' Kantor Wilayah Direktorat Jenderal Perbendaharaan Provinsi Sumatera Barat';
+  const eselon = value.jabatan;
+  const eselonIII = getUnitKerja(value.eselonIIIText);
+  const eselonIV = value.eselonIVText;
 
-  if(eselon.toLowerCase() === 'iv.a' || eselon.toLowerCase() === 'iv.b') {
-    if(unitKerja.toLowerCase() === 'kanwil djpbn prov. sumatera barat') {
-      return `${employee.Jabatan} ${employee.UnitEselonIII} ${getUnitKerja(employee.UnitEselonII)}`
-    }else{
-      return `${employee.Jabatan} ${getUnitKerja(employee.UnitEselonIII)}`
-    }
+  if (eselon === "1") {
+    return `Kepala ${eselonIII}`
+  } 
+  if (eselon === "2") {
+    return `Kepala ${eselonIV} ${eselonIII}`
   }
 
-  return employee.Jabatan
+  return `Pelaksana ${eselonIV} ${eselonIII}${isKPPN}`
+
 }
 
 function setData(value: ValueType, employee: EmployeeDataTypes[]) {
@@ -357,7 +476,7 @@ function setData(value: ValueType, employee: EmployeeDataTypes[]) {
       ...selectedEmployee, 
       UnitEselonII: getUnitKerja(selectedEmployee?.UnitEselonII), 
       NIP: selectedEmployee?.NIP.slice(1),
-      JabatanLengkap: getJabatanLengkap(selectedEmployee)
+      JabatanLengkap: getJabatanLengkap(selectedEmployee, value)
     },
     atasan: {
       ...selectedAtasan, 

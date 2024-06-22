@@ -70,7 +70,7 @@ export default function SuratPlhModal({isOpen, onOpenChange, employee}: SuratPlh
     year: new Date().getFullYear(),
   });
 
-  const generateDocument = async () => {
+  const generateSPRIN = async () => {
     try {
       const content = await loadFilePromise(`${import.meta.env.VITE_API_URL}/template/templateNodePlh.docx`);
       const zip = new PizZip(content);
@@ -91,7 +91,7 @@ export default function SuratPlhModal({isOpen, onOpenChange, employee}: SuratPlh
         mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       });
   
-      saveAs(out, 'output.docx');
+      saveAs(out, `sPRIN_${new Date().getTime()}.docx`);
     } catch(err: any) {
       console.error(err.message);
       toast.error(JSON.stringify(err.message), {
@@ -304,7 +304,7 @@ export default function SuratPlhModal({isOpen, onOpenChange, employee}: SuratPlh
               <ModalFooter className="mr-4">
                 <Button 
                   className='bg-black text-white' 
-                  onClick={generateDocument} 
+                  onClick={generateSPRIN} 
                 >
                   Generate
                 </Button>
