@@ -5,6 +5,7 @@ import AttendanceReport from "../sections/PDF/AttendanceReport";
 import {Spinner} from "@nextui-org/react";
 import { AttendanceEventBody } from "../sections/PDF/types";
 import axiosAuth from "../config/axios";
+import Footer from "../components/Footer";
 
 //---------------------------------------------------------------------------------------------------------
 export default function AttPreviewPage() {
@@ -45,6 +46,7 @@ export default function AttPreviewPage() {
           :
             <div className='w-full max-w-[800px] '>
               <AttendanceReport attendance={attendance}/>
+              <Footer/>
             </div>
         }
 

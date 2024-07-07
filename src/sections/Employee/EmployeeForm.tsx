@@ -1,7 +1,9 @@
 import {useState, useEffect, useMemo} from "react";
+import { useNavigate } from "react-router-dom";
 import { Key } from '@react-types/shared';
-import {Input, Image, Autocomplete, AutocompleteItem, Textarea} from "@nextui-org/react";
+import {Input, Image, Autocomplete, AutocompleteItem, Textarea, Button, Tooltip} from "@nextui-org/react";
 import { EmployeeDataTypes, EmployeeFormTypes } from "./types";
+import Iconify from "../../components/Iconify";
 import moment from "moment";
 
 
@@ -10,6 +12,8 @@ interface EmployeeFormProps{
 };
 
 export default function EmployeeForm({employee}: EmployeeFormProps) {
+  const navigate = useNavigate();
+
   const [value, setValue] = useState<number>(0);
 
   const [empForm, setEmpForm] = useState<EmployeeFormTypes>({
@@ -63,6 +67,10 @@ export default function EmployeeForm({employee}: EmployeeFormProps) {
 
   const ttlFooter = value?`${tempatLahir}, ${tanggalLahir}`:null
 
+  const handleRedirect = () => {
+    navigate("/inject")
+  };
+
   useEffect(() => {
     if(value == 0){
       return setEmpForm((prev) => ({
@@ -101,7 +109,7 @@ export default function EmployeeForm({employee}: EmployeeFormProps) {
       jabatan: (employee.length > 0 && value!==0)? employee.find((item) => item.No == value )?.Jabatan || "": "",
       pendidikan: (employee.length > 0 && value!==0)? employee.find((item) => item.No == value )?.PendidikanTerakhir || "": "", 
     }));
-  }, [employee, value])
+  }, [employee, value]);
 
   return(
     <>
@@ -126,7 +134,6 @@ export default function EmployeeForm({employee}: EmployeeFormProps) {
           <Autocomplete
             name='nama'
             label="Ketik nama pegawai disini"
-            size="lg"
             variant="bordered"
             className="max-w-xl px-2"
             defaultItems={employee}
@@ -141,7 +148,6 @@ export default function EmployeeForm({employee}: EmployeeFormProps) {
           <Textarea
             name='esIII'
             label="Bidang/Bagian/KPPN"
-            size="lg"
             variant="bordered"
             className="max-w-xl px-2"
             value={empForm.esIII || " "}
@@ -152,7 +158,6 @@ export default function EmployeeForm({employee}: EmployeeFormProps) {
           <Input
             name='nip'
             label="NIP"
-            size="lg"
             variant="bordered"
             placeholder=" "
             className="max-w-xl px-2"
@@ -163,7 +168,6 @@ export default function EmployeeForm({employee}: EmployeeFormProps) {
           <Textarea
             name='esIV'
             label="Seksi"
-            size="lg"
             variant="bordered"
             className="max-w-xl px-2"
             spellCheck={false}
@@ -174,7 +178,6 @@ export default function EmployeeForm({employee}: EmployeeFormProps) {
           <Input
             name='pangkatGol'
             label="Pangkat/Gol"
-            size="lg"
             variant="bordered"
             placeholder=" "
             className="max-w-xl px-2"
@@ -185,7 +188,6 @@ export default function EmployeeForm({employee}: EmployeeFormProps) {
           <Textarea
             name='jabatan'
             label="Jabatan"
-            size="lg"
             variant="bordered"
             className="max-w-xl px-2"
             value={empForm.jabatan || " "}
@@ -197,7 +199,6 @@ export default function EmployeeForm({employee}: EmployeeFormProps) {
             <Input
               name='gelarDepan'
               label="Gelar Depan"
-              size="lg"
               variant="bordered"
               placeholder=" "
               className="px-2"
@@ -208,7 +209,6 @@ export default function EmployeeForm({employee}: EmployeeFormProps) {
             <Input
               name='gelarBelakang'
               label="Gelar Belakang"
-              size="lg"
               variant="bordered"
               placeholder=" "
               className=" px-2"
@@ -220,7 +220,6 @@ export default function EmployeeForm({employee}: EmployeeFormProps) {
           <Input
               name='pendidikan'
               label="Pendidikan"
-              size="lg"
               variant="bordered"
               className="max-w-xl px-2"
               placeholder=" "
@@ -228,6 +227,12 @@ export default function EmployeeForm({employee}: EmployeeFormProps) {
               spellCheck={false}
               labelPlacement="outside"
           />
+          <Tooltip content="Update Data" placement="right-end">
+            <Button isIconOnly className='bg-black text-white mt-5' onClick={handleRedirect}>
+              <Iconify icon={"uiw:cloud-upload"}/>
+            </Button>
+          </Tooltip>
+
         </div>
       </div>
     </>

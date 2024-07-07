@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import GeneratorSection from "../sections/Generator/GeneratorSection";
+import Footer from "../components/Footer";
 
 
 export default function GeneratorPage() {
@@ -15,11 +16,13 @@ export default function GeneratorPage() {
           <h1 className="text-3xl font-bold">Generator</h1>
           <p className="text-sm text-slate-500 ">Modul ini hanya bisa diakses melalui Browser, tidak dapat melalui Ms Teams.</p>
           <p className="text-sm text-slate-500 -mt-2">Akses di link berikut: 
-            <a href="https://sikuai.web.id/generator" target="blank" className="text-sm text-blue-600"> https//sikuai.web.id/generator</a>
+            <a href="https://sikuai.web.id/generator" target="blank" className="text-sm text-blue-600"> https://sikuai.web.id/generator</a>
           </p>          
         </div>
         
         <GeneratorSection />
+
+        <Footer />
       </div>
     </>
   )

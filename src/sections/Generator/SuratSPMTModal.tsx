@@ -338,6 +338,7 @@ export default function SuratSPMTModal({isOpen, onOpenChange, employee}: SuratSP
                   variant="bordered" 
                   className="max-w-xl"
                   labelPlacement="outside"
+                  placeholder="Pilih Es III"
                   value={value.eselonIII}
                   onChange={handleChangeEselonIII}
                   multiple={false}
@@ -350,7 +351,7 @@ export default function SuratSPMTModal({isOpen, onOpenChange, employee}: SuratSP
                   variant="bordered" 
                   className={value.jabatan === "1" ? "hidden" : "max-w-xl"}
                   labelPlacement="outside"
-                  placeholder="Pilih jenis"
+                  placeholder="Pilih Es IV"
                   value={value.eselonIV}
                   onChange={handleChangeEselonIV}
                   multiple={false}

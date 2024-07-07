@@ -515,6 +515,17 @@ export default function SuratTugasKegModal({isOpen, onOpenChange, employee}: Sur
                     <Chip key={index} onClose={() => handleDeletePeserta(item.No)}>{`${index+1}. ${item.Nama}`}</Chip>
                   ))}
                 </div>
+                <Input
+                  type="text"
+                  label="Judul ST (Copas ke Nadine)"
+                  className="pt-4"
+                  name="judulST"
+                  placeholder=" "
+                  labelPlacement="outside"
+                  disabled
+                  value={`Penugasan Mengikuti ${value.namaKegiatan} a.n. ${getSTJudulNama(value.peserta)}`}
+                >
+                </Input>
               </ModalBody>
               <ModalFooter className="mr-4">
                 <Button 
@@ -644,4 +655,18 @@ function validateInput(value: ValueType, isHeaderAlternatif: boolean) {
 
   return true
 };
+
+function getSTJudulNama(peserta: EmployeeDataTypes[]) {
+  if(peserta.length=== 0) {
+    return ""
+  };
+
+  const isMoreThan1 = peserta.length > 1;
+  if(isMoreThan1){
+    return `${peserta[0].Nama}, dkk.`
+  };
+
+  return `${peserta[0].Nama} NIP ${peserta[0].NIP.slice(0)}`
+};
+
 

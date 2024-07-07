@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import EmployeeSection from "../sections/Employee/EmployeeSection";
+import Footer from "../components/Footer";
 
 
 export default function EmployeePage() {
@@ -16,6 +17,9 @@ export default function EmployeePage() {
         </div>
         <div className="w-full  p-4">
           <EmployeeSection />
+
+          <Footer />
+
         </div>
       </div>
     </>

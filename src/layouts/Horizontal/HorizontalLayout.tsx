@@ -25,7 +25,9 @@ export default function HorizontalLayout() {
         </NavbarContent>
       </Navbar> 
 
-      <Outlet />    
+      <Outlet />
+
+
     </>
   );
 }

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import  UploadDataSection  from "../sections/UploadData/UploadDataSection";
 import {Button} from "@nextui-org/react";
 import Iconify from "../components/Iconify";
+import Footer from "../components/Footer";
 
 
 export default function UploadDataPage() {
@@ -24,6 +25,7 @@ export default function UploadDataPage() {
         <div className="w-full  p-4">
           <UploadDataSection />
         </div>
+        <Footer />
       </div>
     </>
   )
