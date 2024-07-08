@@ -1,6 +1,5 @@
 import { Helmet} from "react-helmet-async";
 import AttendanceSection from "../sections/Attendance/AttendanceSection";
-import Footer from "../components/Footer";
 
 export default function AttFormPage() {
   return (
@@ -10,8 +9,7 @@ export default function AttFormPage() {
       </Helmet>
       
       <div className="flex items-center justify-center h-screen bg-no-repeat bg-cover bg-[url('/tail-gradient.png')]" >
-          <AttendanceSection />
-          <Footer />
+        <AttendanceSection />
       </div>
     </>
   )

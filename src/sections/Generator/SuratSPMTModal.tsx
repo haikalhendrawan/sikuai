@@ -133,7 +133,7 @@ export default function SuratSPMTModal({isOpen, onOpenChange, employee}: SuratSP
   const handleChangeEselonIII = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
     const eselonIIISelection = ESELONIII_SELECTION(employee);
-    const selectedText = eselonIIISelection.find((es, i) => i === parseInt(selectedValue)) || '';
+    const selectedText = eselonIIISelection.find((_, i) => i === parseInt(selectedValue)) || '';
   
     setValue(prev => ({
       ...prev,
@@ -145,7 +145,7 @@ export default function SuratSPMTModal({isOpen, onOpenChange, employee}: SuratSP
   const handleChangeEselonIV = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
     const eselonIVSelection = ESELONIV_SELECTION(value.eselonIIIText, employee);
-    const selectedText = eselonIVSelection.find((es, i) => i === parseInt(selectedValue)) || '';
+    const selectedText = eselonIVSelection.find((_, i) => i === parseInt(selectedValue)) || '';
 
     setValue(prev => ({
       ...prev,
@@ -210,7 +210,7 @@ export default function SuratSPMTModal({isOpen, onOpenChange, employee}: SuratSP
   );
 
   const jabatanSelection = useMemo(() => 
-    JABATAN_SELECTION.map((item: any, index: number) => (
+    JABATAN_SELECTION.map((item: any) => (
       <SelectItem key={item.value}>
         {item.label}
       </SelectItem>

@@ -1,8 +1,8 @@
-import {useState, useMemo} from "react";
-import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, DateValue, Input, Switch,
+import {useState} from "react";
+import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter,  Input,
         Button} from "@nextui-org/react";
 import axiosAuth from "../../../config/axios";
-import toast , {Toaster} from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 interface DasarHukumModalProps {
   isOpen: boolean,
