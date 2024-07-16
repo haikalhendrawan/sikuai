@@ -40,7 +40,7 @@ export default function AttPreviewPage() {
         <title>Preview Attendance</title>
       </Helmet>
       
-      <div className="flex items-center justify-center h-screen bg-no-repeat bg-cover bg-[url('/tail-gradient.png')]">
+      <div className="flex flex-col items-center justify-center min-h-screen py-10 bg-[url('/bg-effect.png')] bg-no-repeat bg-cover">
         {isLoading
           ? <Spinner/>
           :

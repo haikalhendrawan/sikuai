@@ -7,6 +7,7 @@ import EmployeePage from "./pages/EmployeePage";
 import HomePage from "./pages/HomePage";
 import UploadDataPage from "./pages/UploadDataPage";
 import GeneratorPage from "./pages/GeneratorPage";
+import DashboardPage from "./pages/DashboardPage";
 
 
 export default function Router(){
@@ -18,6 +19,7 @@ export default function Router(){
         <Route path="employee" element={<EmployeePage />} />
         <Route path="inject" element={<UploadDataPage />} />
         <Route path="generator" element={<GeneratorPage />} />
+        <Route path="dashboard" element={<DashboardPage />} />
       </Route>
 
       <Route path="/attForm" element={<AttFormPage/>} />
