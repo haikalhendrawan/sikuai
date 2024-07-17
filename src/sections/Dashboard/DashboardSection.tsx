@@ -2,9 +2,13 @@ import {useState, useEffect, Key} from "react";
 import {Card, CardHeader, CardBody, CardFooter, Select, SelectItem} from "@nextui-org/react";
 import axiosAuth from "../../config/axios";
 import toast from 'react-hot-toast';
+import Iconify from "../../components/Iconify";
 import { EmployeeDataTypes } from "./types";
 import Chart from "react-apexcharts";
-import JumlahPelaksana from "./JumlahPelaksana";
+import Eselon from "./Eselon";
+import Generasi from "./Generasi";
+import Gender from "./Gender";
+import Pendidikan from "./Pendidikan";
 
 const option = {
   chart: {
@@ -41,6 +45,8 @@ export default function DashboardSection(){
 
   const [selectedUnit, setSelectedUnit] = useState<string[]>(["Kanwil DJPBN Prov. Sumatera Barat", "KPPN Padang (A1)", "KPPN Bukittinggi (A1)", "KPPN Solok (A1)","KPPN Lubuk Sikaping (A2)", "KPPN Sijunjung (A2)", "KPPN Painan (A2)"]);
 
+  const employeeByUnit = employee?.filter((item) => selectedUnit?.includes(item.UnitKerja));
+
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedUnit(UNIT[parseInt(e.target.value)]?.value);
   };
@@ -73,26 +79,68 @@ export default function DashboardSection(){
 
   return(
     <>
+        <div className="flex flex-row gap-2 items-center justify-between">
+          <div className="flex flex-row gap-2 items-center w-1/2">
+            <Iconify width={'50px'} icon={"solar:city-bold-duotone"}/>
+            <Select
+              key={0}
+              label="Pilih Unit"
+              className="max-w-xs"
+              value={selectedUnit}
+              onChange={(e) => handleChange(e)}
+              variant='bordered'
+              placeholder="Pilih Unit"
+            >
+              {
+                UNIT.map((unit, index) => (
+                  <SelectItem key={unit.id} value={unit.id}>
+                    {unit.text}
+                  </SelectItem>
+                ))
+              }
 
-        <Select
-          key={0}
-          label="Pilih Unit"
-          className="max-w-xs"
-          value={selectedUnit}
-          onChange={(e) => handleChange(e)}
-        >
-          {
-            UNIT.map((unit, index) => (
-              <SelectItem key={unit.id} value={unit.id}>
-                {unit.text}
-              </SelectItem>
-            ))
-          }
+            </Select>
+          </div>
 
-        </Select>
+          <div className="flex flex-row gap-2 items-center w-1/2">
+            <Iconify width={'50px'} icon={"solar:database-bold-duotone"}/>
+            <Select
+              key={0}
+              label="Pilih Data"
+              className="max-w-xs"
+              value={selectedUnit}
+              onChange={(e) => handleChange(e)}
+              variant='bordered'
+              placeholder="Pilih Data"
+            >
+              {
+                UNIT.map((unit, index) => (
+                  <SelectItem key={unit.id} value={unit.id}>
+                    {unit.text}
+                  </SelectItem>
+                ))
+              }
 
-      <JumlahPelaksana 
-        employee={employee.filter((item) => selectedUnit?.includes(item.UnitKerja))} 
+            </Select>
+          </div>
+         
+        </div>
+       
+
+      <Eselon 
+        employee={employeeByUnit} 
+      />
+
+      <Generasi 
+        employee={employeeByUnit}
+      />
+
+      <Gender 
+        employee={employeeByUnit}
+      />
+
+      <Pendidikan 
+        employee={employeeByUnit}
       />
 
       <Chart 

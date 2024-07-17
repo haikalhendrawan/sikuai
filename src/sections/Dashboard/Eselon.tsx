@@ -1,10 +1,10 @@
 import { EmployeeDataTypes } from "./types";
 
-interface JumlahPelaksanaProps {
+interface EselonProps {
   employee: EmployeeDataTypes[] | []
 };
 
-export default function JumlahPelaksana({employee}: JumlahPelaksanaProps) {
+export default function Eselon({employee}: EselonProps) {
 
   const amount = employee?.length;
 
