@@ -14,12 +14,12 @@ export default function Router(){
   return (
     <Routes>
       <Route path="/" element={<HorizontalLayout />}>
-        <Route index element={<HomePage/>}/>
+        <Route index element={<DashboardPage />} />
+        <Route path="dashboard" element={<DashboardPage />} />
         <Route path="events" element={<EventListPage />} />
         <Route path="employee" element={<EmployeePage />} />
         <Route path="inject" element={<UploadDataPage />} />
         <Route path="generator" element={<GeneratorPage />} />
-        <Route path="dashboard" element={<DashboardPage />} />
       </Route>
 
       <Route path="/attForm" element={<AttFormPage/>} />

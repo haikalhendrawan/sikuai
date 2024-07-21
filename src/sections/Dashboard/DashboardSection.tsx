@@ -4,52 +4,64 @@ import axiosAuth from "../../config/axios";
 import toast from 'react-hot-toast';
 import Iconify from "../../components/Iconify";
 import { EmployeeDataTypes } from "./types";
-import Chart from "react-apexcharts";
 import Eselon from "./Eselon";
 import Generasi from "./Generasi";
 import Gender from "./Gender";
 import Pendidikan from "./Pendidikan";
-
-const option = {
-  chart: {
-    id: "basic-bar"
-  },
-  xaxis: {
-    categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
-  },
-  labels: ['Apple', 'Mango', 'Orange', 'Watermelon']
-};
-
-const series = [44, 55, 41, 17, 15];
-
-interface item{
+import Bagan from "./Bagan";
+// ------------------------------------------------------------------------------
+interface Item{
   id: number,
   text: string,
-  value: string[]
+  unit: string[]
 };
 
-const UNIT: item[] = [
-  {id:0, text: "Kanwil + KPPN", value: ["Kanwil DJPBN Prov. Sumatera Barat", "KPPN Padang (A1)", "KPPN Bukittinggi (A1)", "KPPN Solok (A1)","KPPN Lubuk Sikaping (A2)", "KPPN Sijunjung (A2)", "KPPN Painan (A2)"]},
-  {id:1, text: "Kanwil DJPBN Prov. Sumatera Barat", value: ["Kanwil DJPBN Prov. Sumatera Barat"]},
-  {id:2, text: "KPPN Padang", value: ["KPPN Padang (A1)"]},
-  {id:3, text: "KPPN Bukittinggi", value:["KPPN Bukittinggi (A1)"]},
-  {id:4, text: "KPPN Solok", value: ["KPPN Solok (A1)"]},
-  {id:5, text: "KPPN Lubuk Sikaping", value: ["KPPN Lubuk Sikaping (A2)"]},
-  {id:6, text: "KPPN Sijunjung", value: ["KPPN Sijunjung (A2)"]},
-  {id:7, text: "KPPN Painan", value: ["KPPN Painan (A2)"]},
+interface Data{
+  id: number,
+  text: string,
+  component: JSX.Element
+};
+
+const UNIT: Item[] = [
+  {id:0, text: "Kanwil + KPPN", unit: ["Kanwil DJPBN Prov. Sumatera Barat", "KPPN Padang (A1)", "KPPN Bukittinggi (A1)", "KPPN Solok (A1)","KPPN Lubuk Sikaping (A2)", "KPPN Sijunjung (A2)", "KPPN Painan (A2)"]},
+  {id:1, text: "Kanwil DJPBN Prov. Sumatera Barat", unit: ["Kanwil DJPBN Prov. Sumatera Barat"]},
+  {id:2, text: "KPPN Padang", unit: ["KPPN Padang (A1)"]},
+  {id:3, text: "KPPN Bukittinggi", unit:["KPPN Bukittinggi (A1)"]},
+  {id:4, text: "KPPN Solok", unit: ["KPPN Solok (A1)"]},
+  {id:5, text: "KPPN Lubuk Sikaping", unit: ["KPPN Lubuk Sikaping (A2)"]},
+  {id:6, text: "KPPN Sijunjung", unit: ["KPPN Sijunjung (A2)"]},
+  {id:7, text: "KPPN Painan", unit: ["KPPN Painan (A2)"]},
 ];
 
-
+// ------------------------------------------------------------------------------
 export default function DashboardSection(){
   const [employee, setEmployee] = useState<EmployeeDataTypes[] | []>([]);
 
-  const [selectedUnit, setSelectedUnit] = useState<string[]>(["Kanwil DJPBN Prov. Sumatera Barat", "KPPN Padang (A1)", "KPPN Bukittinggi (A1)", "KPPN Solok (A1)","KPPN Lubuk Sikaping (A2)", "KPPN Sijunjung (A2)", "KPPN Painan (A2)"]);
+  const [value, setValue] = useState({
+    unit: "0",
+    data: "1"
+  });
 
-  const employeeByUnit = employee?.filter((item) => selectedUnit?.includes(item.UnitKerja));
-
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedUnit(UNIT[parseInt(e.target.value)]?.value);
+  const handleSelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setValue({
+      ...value,
+      [e.target.name]: e.target.value
+    });
   };
+
+  const selectedUnit = UNIT[parseInt(value?.unit)]?.unit;
+
+  const employeeByUnit = employee?.filter((item) => selectedUnit?.includes(item?.UnitKerja));
+
+  const unitText = UNIT[parseInt(value?.unit)]?.text === "Kanwil DJPBN Prov. Sumatera Barat" ? "Kanwil DJPb Sumbar" : UNIT[parseInt(value?.unit)]?.text;
+
+  const DATA: Data[] = [
+    {id:1, text: "General", component: <Eselon employee={employeeByUnit} unit={unitText}/>},
+    {id:2, text: "Generasi/Usia", component: <Generasi employee={employeeByUnit} unit={unitText}/>},
+    {id:3, text: "Gender", component: <Gender employee={employeeByUnit} unit={unitText}/>},
+    {id:4, text: "Pendidikan", component: <Pendidikan employee={employeeByUnit} unit={unitText}/>},
+    {id:5, text: "Bagan Visual", component: <Bagan employee={employeeByUnit} unit={UNIT[parseInt(value?.unit)]?.text}/>},
+  ];
 
   useEffect(() => {
     async function getData(){
@@ -79,20 +91,20 @@ export default function DashboardSection(){
 
   return(
     <>
-        <div className="flex flex-row gap-2 items-center justify-between">
-          <div className="flex flex-row gap-2 items-center w-1/2">
+        <div className="grid grid-cols-2 gap-4 w-[800px] mb-10">
+          <div className="flex flex-row gap-2 items-center">
             <Iconify width={'50px'} icon={"solar:city-bold-duotone"}/>
             <Select
-              key={0}
               label="Pilih Unit"
               className="max-w-xs"
-              value={selectedUnit}
-              onChange={(e) => handleChange(e)}
+              onChange={handleSelectionChange}
               variant='bordered'
               placeholder="Pilih Unit"
+              selectedKeys={[value.unit]}
+              name="unit"
             >
               {
-                UNIT.map((unit, index) => (
+                UNIT.map((unit) => (
                   <SelectItem key={unit.id} value={unit.id}>
                     {unit.text}
                   </SelectItem>
@@ -102,19 +114,19 @@ export default function DashboardSection(){
             </Select>
           </div>
 
-          <div className="flex flex-row gap-2 items-center w-1/2">
+          <div className="flex flex-row gap-2 items-center">
             <Iconify width={'50px'} icon={"solar:database-bold-duotone"}/>
             <Select
-              key={0}
               label="Pilih Data"
               className="max-w-xs"
-              value={selectedUnit}
-              onChange={(e) => handleChange(e)}
+              onChange={handleSelectionChange}
               variant='bordered'
               placeholder="Pilih Data"
+              selectedKeys={[value.data]}
+              name="data"
             >
               {
-                UNIT.map((unit, index) => (
+                DATA.map((unit) => (
                   <SelectItem key={unit.id} value={unit.id}>
                     {unit.text}
                   </SelectItem>
@@ -127,28 +139,7 @@ export default function DashboardSection(){
         </div>
        
 
-      <Eselon 
-        employee={employeeByUnit} 
-      />
-
-      <Generasi 
-        employee={employeeByUnit}
-      />
-
-      <Gender 
-        employee={employeeByUnit}
-      />
-
-      <Pendidikan 
-        employee={employeeByUnit}
-      />
-
-      <Chart 
-        options={option}
-        series={series}
-        type="donut"
-        width="500"
-      />
+        {DATA[parseInt(value.data) - 1]?.component}
 
     </>
   )

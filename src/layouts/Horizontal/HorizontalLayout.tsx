@@ -5,6 +5,8 @@ import { Outlet, useLocation } from "react-router-dom";
 export default function HorizontalLayout() {
   const {pathname} = useLocation();
 
+  const dashboardKey = pathname === '/' || pathname === '/dashboard' ? '/dashboard' : pathname;
+
   return (
     <>
       <Navbar isBordered>
@@ -14,10 +16,10 @@ export default function HorizontalLayout() {
         <NavbarContent className="hidden sm:flex gap-4" justify="center">
           <div className="flex flex-wrap gap-4">
             <Tabs selectedKey={pathname} color={'default'} aria-label="Tabs colors" radius="full">
+              <Tab key='/dashboard' id='/dashboard' href="/dashboard" title="Dashboard" />
               <Tab key='/employee' id="/employee" href="/employee" title="Query" />
               <Tab key= '/events' id="/events" href="/events" title="Attendance" />
               <Tab key='/generator' id="/generator" href="/generator" title="Generator" />
-              <Tab key='/dashboard' id='/dashboard' href="/dashboard" title="Dashboard" />
             </Tabs>
           </div>
         </NavbarContent>
