@@ -1,7 +1,7 @@
-import {useState, useEffect, Key} from "react";
-import {Card, CardHeader, CardBody, CardFooter, Select, SelectItem} from "@nextui-org/react";
+import {useState, useEffect} from "react";
+import { Select, SelectItem} from "@nextui-org/react";
 import axiosAuth from "../../config/axios";
-import toast from 'react-hot-toast';
+import toast, {Toaster} from 'react-hot-toast';
 import Iconify from "../../components/Iconify";
 import { EmployeeDataTypes } from "./types";
 import Eselon from "./Eselon";
@@ -140,6 +140,8 @@ export default function DashboardSection(){
        
 
         {DATA[parseInt(value.data) - 1]?.component}
+
+        <Toaster />
 
     </>
   )

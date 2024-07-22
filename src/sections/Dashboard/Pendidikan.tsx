@@ -51,6 +51,7 @@ export default function Pendidikan({employee, unit}: PendidikanProps){
     dataLabels: {
       enabled: true,
       formatter: function (val: number, opts: any) {
+        console.log(val);
         return  `${(opts.w.config.series[opts.seriesIndex]/amount * 100).toFixed(2)} %`;
       }
     }

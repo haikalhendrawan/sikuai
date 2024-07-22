@@ -4,7 +4,6 @@ import EventListPage from "./pages/EventListPage";
 import AttFormPage from "./pages/AttFormPage";
 import AttPreviewPage from "./pages/AttPreviewPage";
 import EmployeePage from "./pages/EmployeePage";
-import HomePage from "./pages/HomePage";
 import UploadDataPage from "./pages/UploadDataPage";
 import GeneratorPage from "./pages/GeneratorPage";
 import DashboardPage from "./pages/DashboardPage";

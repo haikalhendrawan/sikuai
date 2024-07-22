@@ -2,7 +2,7 @@ import {useState, useEffect} from "react";
 import EmployeeForm from "./EmployeeForm";
 import axiosAuth from "../../config/axios";
 import { EmployeeDataTypes } from "./types";
-import toast from 'react-hot-toast';
+import toast, {Toaster} from 'react-hot-toast';
 
 
 export default function EmployeeSection(){
@@ -35,6 +35,7 @@ export default function EmployeeSection(){
   return( 
     <>
       <EmployeeForm employee={employee}/>
+      <Toaster />
     </>
   )
 }
