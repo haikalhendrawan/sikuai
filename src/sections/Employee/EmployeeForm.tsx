@@ -5,6 +5,7 @@ import {Input, Image, Autocomplete, AutocompleteItem, Textarea, Button, Tooltip}
 import { EmployeeDataTypes, EmployeeFormTypes } from "./types";
 import Iconify from "../../components/Iconify";
 import moment from "moment";
+import * as XLSX from "xlsx";
 
 
 interface EmployeeFormProps{
@@ -69,6 +70,15 @@ export default function EmployeeForm({employee}: EmployeeFormProps) {
 
   const handleRedirect = () => {
     navigate("/inject")
+  };
+
+  const handlePrintExcel = () => {
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet(employee);
+    const localDate = new Date().toLocaleDateString('en-GB');
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+    XLSX.writeFile(workbook, `Data_Pegawai_${localDate}.xlsx`);
   };
 
   useEffect(() => {
@@ -227,12 +237,18 @@ export default function EmployeeForm({employee}: EmployeeFormProps) {
               spellCheck={false}
               labelPlacement="outside"
           />
-          <Tooltip content="Update Data" placement="right-end">
-            <Button isIconOnly className='bg-black text-white mt-5' onClick={handleRedirect}>
-              <Iconify icon={"uiw:cloud-upload"}/>
-            </Button>
-          </Tooltip>
-
+          <div className="flex flex-row gap-2">
+            <Tooltip content="Cetak Excel Data Seluruh Pegawai" placement="right-end">
+              <Button isIconOnly className="mt-5" onClick={handlePrintExcel}>
+                <Iconify icon={"vscode-icons:file-type-excel"}/>
+              </Button>
+            </Tooltip>
+            <Tooltip content="Update Data" placement="right-end">
+              <Button isIconOnly className='bg-black text-white mt-5' onClick={handleRedirect}>
+                <Iconify icon={"uiw:cloud-upload"}/>
+              </Button>
+            </Tooltip>
+          </div>
         </div>
       </div>
     </>
