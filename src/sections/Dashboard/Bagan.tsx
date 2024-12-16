@@ -72,14 +72,19 @@ export default function Bagan({employee, unit}: GenderProps) {
             }
           </div>
         </div>
-        ))} 
+        ))
+      } 
 
     </>
   ;
 
-  const baganKanwilKPPN = <h1>Silahkan pilih Unit Kanwil atau KPPN</h1>;
+  const baganKanwilKPPN = (
+    <>
+      Silahkan pilih unit Kanwil atau KPPN
+    </>
+  );
 
-  return unit === "Kanwil + KPPN"? baganKanwilKPPN : unit === "Kanwil DJPBN Prov. Sumatera Barat"? baganKanwil : baganKPPN;
+  return unit === "Kanwil + KPPN"? baganKanwilKPPN : unit?.includes("Kanwil DJPBN")? baganKanwil : baganKPPN;
 }
 
 function BoxEsII({employee, esItem}: {employee: EmployeeDataTypes | undefined, esItem?: string}){

@@ -23,19 +23,17 @@ interface Data{
 };
 
 const UNIT: Item[] = [
-  {id:0, text: "Kanwil + KPPN", unit: ["Kanwil DJPBN Prov. Sumatera Barat", "KPPN Padang (A1)", "KPPN Bukittinggi (A1)", "KPPN Solok (A1)","KPPN Lubuk Sikaping (A2)", "KPPN Sijunjung (A2)", "KPPN Painan (A2)"]},
-  {id:1, text: "Kanwil DJPBN Prov. Sumatera Barat", unit: ["Kanwil DJPBN Prov. Sumatera Barat"]},
-  {id:2, text: "KPPN Padang", unit: ["KPPN Padang (A1)"]},
-  {id:3, text: "KPPN Bukittinggi", unit:["KPPN Bukittinggi (A1)"]},
-  {id:4, text: "KPPN Solok", unit: ["KPPN Solok (A1)"]},
-  {id:5, text: "KPPN Lubuk Sikaping", unit: ["KPPN Lubuk Sikaping (A2)"]},
-  {id:6, text: "KPPN Sijunjung", unit: ["KPPN Sijunjung (A2)"]},
-  {id:7, text: "KPPN Painan", unit: ["KPPN Painan (A2)"]},
+  {id:0, text: "Kanwil + KPPN", unit: ["Kanwil DJPBN Prov. Gorontalo", "KPPN Gorontalo (A1)", "KPPN Marisa (A2)"]},
+  {id:1, text: "Kanwil DJPBN Prov. Gorontalo", unit: ["Kanwil DJPBN Prov. Gorontalo"]},
+  {id:2, text: "KPPN Gorontalo", unit: ["KPPN Gorontalo (A1)"]},
+  {id:3, text: "KPPN Marisa", unit:["KPPN Marisa (A2)"]},
 ];
 
 // ------------------------------------------------------------------------------
 export default function DashboardSection(){
   const [employee, setEmployee] = useState<EmployeeDataTypes[] | []>([]);
+
+  const [unit, setUnit] = useState<Item[] | []>([]);
 
   const [value, setValue] = useState({
     unit: "0",
@@ -49,11 +47,11 @@ export default function DashboardSection(){
     });
   };
 
-  const selectedUnit = UNIT[parseInt(value?.unit)]?.unit;
+  const selectedUnit = unit[parseInt(value?.unit)]?.unit;
 
   const employeeByUnit = employee?.filter((item) => selectedUnit?.includes(item?.UnitKerja));
 
-  const unitText = UNIT[parseInt(value?.unit)]?.text === "Kanwil DJPBN Prov. Sumatera Barat" ? "Kanwil DJPb Sumbar" : UNIT[parseInt(value?.unit)]?.text;
+  const unitText = unit[parseInt(value?.unit)]?.text;
 
   const DATA: Data[] = [
     {id:1, text: "General", component: <Eselon employee={employeeByUnit} unit={unitText}/>},
@@ -63,12 +61,23 @@ export default function DashboardSection(){
     {id:5, text: "Bagan Visual", component: <Bagan employee={employeeByUnit} unit={UNIT[parseInt(value?.unit)]?.text}/>},
   ];
 
+  function getAllUnitKerja(employee: EmployeeDataTypes[] | []){
+    const allUnit = employee?.map(item => item.UnitKerja);
+    const uniqueUnit = [...new Set(allUnit)];
+    const uniqueItem = uniqueUnit.map((item, index) => ({id:index+1, text: item, unit: [item]}));
+    setUnit([
+      {id:0, text: "Kanwil + KPPN", unit: [...uniqueUnit]},
+      ...uniqueItem
+    ])
+  }
+
   useEffect(() => {
     async function getData(){
       try{
         const response = await axiosAuth.get("/getAllEmployee");
         setEmployee(response.data.rows);
         console.log(response.data.rows)
+        console.log(getAllUnitKerja(response.data.rows))
       }catch(err: any){
         if(err.response){
           console.log(err)
@@ -104,9 +113,9 @@ export default function DashboardSection(){
               name="unit"
             >
               {
-                UNIT.map((unit) => (
-                  <SelectItem key={unit.id} value={unit.id}>
-                    {unit.text}
+                unit.map((u) => (
+                  <SelectItem key={u.id} value={u.id}>
+                    {u.text}
                   </SelectItem>
                 ))
               }
@@ -146,3 +155,5 @@ export default function DashboardSection(){
     </>
   )
 }
+
+

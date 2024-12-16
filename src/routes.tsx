@@ -3,7 +3,7 @@ import HorizontalLayout from "./layouts/Horizontal/HorizontalLayout";
 import EventListPage from "./pages/EventListPage";
 import AttFormPage from "./pages/AttFormPage";
 import AttPreviewPage from "./pages/AttPreviewPage";
-import EmployeePage from "./pages/EmployeePage";
+// import EmployeePage from "./pages/EmployeePage";
 import UploadDataPage from "./pages/UploadDataPage";
 import GeneratorPage from "./pages/GeneratorPage";
 import DashboardPage from "./pages/DashboardPage";
@@ -16,7 +16,7 @@ export default function Router(){
         <Route index element={<DashboardPage />} />
         <Route path="dashboard" element={<DashboardPage />} />
         <Route path="events" element={<EventListPage />} />
-        <Route path="employee" element={<EmployeePage />} />
+        {/* <Route path="employee" element={<EmployeePage />} /> */}
         <Route path="inject" element={<UploadDataPage />} />
         <Route path="generator" element={<GeneratorPage />} />
       </Route>
