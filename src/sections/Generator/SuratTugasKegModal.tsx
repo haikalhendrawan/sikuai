@@ -577,6 +577,7 @@ function setData(isHeaderAlternatif: boolean, value: ValueType, employee: Employ
     tempat: value.tempat,
     unitPembebanan: value.bebanDIPA==="2"?value.unitPembebanan:SELECT_PEMBEBANAN.find(item => item.value===value.bebanDIPA)?.text,
     peserta: value.peserta,
+    kKanwil: employee.find((item) => item.Jabatan === "Kepala Kantor Wilayah Direktorat Jenderal Perbendaharaan Provinsi Sumatera Barat")?.Nama
   }
 };
 
