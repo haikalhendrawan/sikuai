@@ -89,7 +89,7 @@ export default function SuratTugasDiklatModal({isOpen, onOpenChange, employee}: 
       };
 
       doc.render({
-        value: setData(isDiklatOffline, value)
+        value: setData(isDiklatOffline, value, employee)
       });
   
       const out = doc.getZip().generate({
@@ -126,7 +126,7 @@ export default function SuratTugasDiklatModal({isOpen, onOpenChange, employee}: 
       };
   
       doc.render({
-        value: setData(isDiklatOffline, value)
+        value: setData(isDiklatOffline, value, employee)
       });
   
       const out = doc.getZip().generate({
@@ -465,7 +465,7 @@ export default function SuratTugasDiklatModal({isOpen, onOpenChange, employee}: 
 }
 
 // -----------------------------------------------------------------------------------------------------
-function setData(isDiklatOffline: boolean, value: ValueType) {
+function setData(isDiklatOffline: boolean, value: ValueType, employee: EmployeeDataTypes[]) {
   if (isDiklatOffline && value.bebanDIPA==="3") {
     return {
       isOffline: isDiklatOffline,
@@ -516,6 +516,7 @@ function setData(isDiklatOffline: boolean, value: ValueType) {
     tanggal:  getLamaWaktu(formatDate(value.startDate?.toString() || ""), formatDate(value.endDate?.toString() || "")),
     media: SELECT_MEDIA.find(item => item.value===value.media)?.text,
     peserta: value.peserta,
+    kKanwil: employee.find((item) => item.Jabatan === "Kepala Kantor Wilayah Direktorat Jenderal Perbendaharaan Provinsi Sumatera Barat")?.Nama
   }
 }
 

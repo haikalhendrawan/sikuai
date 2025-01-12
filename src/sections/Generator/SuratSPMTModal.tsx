@@ -269,7 +269,7 @@ export default function SuratSPMTModal({isOpen, onOpenChange, employee}: SuratSP
                   }}
                   placeholder=" "
                   labelPlacement="outside"
-                  description="Cth: SPMT-025/WPB.03/2024, SPMT-05/WPB.03/2024"
+                  description={`Cth: SPMT-025/WPB.03/${new Date().getFullYear()}`}
                   variant="bordered"
                   value={value.nomorND}
                   onChange={handleChange}
@@ -280,7 +280,7 @@ export default function SuratSPMTModal({isOpen, onOpenChange, employee}: SuratSP
                   }
                   endContent={
                     <div className="pointer-events-none flex items-center w-4/5">
-                      <span className="text-default-400 text-small">/WPB.03/2024</span>
+                      <span className="text-default-400 text-small">{`/WPB.03/${new Date().getFullYear()}`}</span>
                     </div>
                   }
                 />
@@ -484,7 +484,7 @@ function setData(value: ValueType, employee: EmployeeDataTypes[]) {
       UnitEselonII: getUnitKerja(selectedAtasan?.UnitEselonII), 
       NIP: selectedAtasan?.NIP.slice(1)
     },
-    year: new Date().getFullYear()
+    year: new Date().getFullYear(),
   }
   return valueOutput
 };

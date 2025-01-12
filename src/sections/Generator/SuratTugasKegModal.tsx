@@ -113,9 +113,9 @@ export default function SuratTugasKegModal({isOpen, onOpenChange, employee}: Sur
         });
       };
 
-      console.log(setData(isHeaderAlternatif, value))
+      console.log(setData(isHeaderAlternatif, value, employee));
       doc.render({
-        value: setData(isHeaderAlternatif, value)
+        value: setData(isHeaderAlternatif, value, employee)
       });
   
       const out = doc.getZip().generate({
@@ -152,7 +152,7 @@ export default function SuratTugasKegModal({isOpen, onOpenChange, employee}: Sur
       };
 
       doc.render({
-        value: setData(isHeaderAlternatif, value)
+        value: setData(isHeaderAlternatif, value, employee)
       });
   
       const out = doc.getZip().generate({
@@ -557,7 +557,7 @@ export default function SuratTugasKegModal({isOpen, onOpenChange, employee}: Sur
 }
 
 // -----------------------------------------------------------------------------------------------------
-function setData(isHeaderAlternatif: boolean, value: ValueType) {
+function setData(isHeaderAlternatif: boolean, value: ValueType, employee: EmployeeDataTypes[]) {
   return {
     isHeaderAlternatif: isHeaderAlternatif,
     year: new Date().getFullYear(),

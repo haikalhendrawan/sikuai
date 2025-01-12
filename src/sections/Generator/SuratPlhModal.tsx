@@ -84,6 +84,7 @@ export default function SuratPlhModal({isOpen, onOpenChange, employee}: SuratPlh
         asli,
         pengganti,
         info,
+        kKanwil: employee.find((item) => item.Jabatan === "Kepala Kantor Wilayah Direktorat Jenderal Perbendaharaan Provinsi Sumatera Barat")?.Nama,
       });
   
       const out = doc.getZip().generate({

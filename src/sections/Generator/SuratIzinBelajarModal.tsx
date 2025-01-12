@@ -161,7 +161,7 @@ export default function SuratIzinBelajarModal({isOpen, onOpenChange, employee}: 
                   }}
                   placeholder=" "
                   labelPlacement="outside"
-                  description="SI-25/WPB.03/2024  "
+                  description={`cth: SI-25/WPB.03/${new Date().getFullYear()}`}
                   variant="bordered"
                   value={value.nomorSurat}
                   onChange={handleChange}
@@ -172,7 +172,7 @@ export default function SuratIzinBelajarModal({isOpen, onOpenChange, employee}: 
                   }
                   endContent={
                     <div className="pointer-events-none flex items-center w-4/5">
-                      <span className="text-default-400 text-small">/WPB.03/2024</span>
+                      <span className="text-default-400 text-small">{`/WPB.03/${new Date().getFullYear()}`}</span>
                     </div>
                   }
                 />
@@ -304,6 +304,8 @@ function setData(value: ValueType, employee: EmployeeDataTypes[]) {
     jurusan: value.jurusan,
     universitas: value.universitas,
     tanggal: getLamaWaktu(formatDate(value.startDate?.toString() || ""), formatDate(value.endDate?.toString() || "")),
-    tanggalSurat: formatDate(value.tanggalSurat?.toString() || "")
+    tanggalSurat: formatDate(value.tanggalSurat?.toString() || ""),
+    year: new Date().getFullYear(),
+    kKanwil: employee.find((item) => item.Jabatan === "Kepala Kantor Wilayah Direktorat Jenderal Perbendaharaan Provinsi Sumatera Barat")?.Nama,
   }
 };
