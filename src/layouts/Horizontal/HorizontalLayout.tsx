@@ -30,6 +30,7 @@ export default function HorizontalLayout() {
               {/* <Tab key='/employee' id="/employee" title="Query" /> */}
               <Tab key= '/events' id="/events" title="Attendance" />
               <Tab key='/generator' id="/generator" title="Generator" />
+              <Tab key='/update' id="/update" title="Update" />
             </Tabs>
           </div>
         </NavbarContent>

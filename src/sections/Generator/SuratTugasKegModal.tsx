@@ -270,9 +270,7 @@ export default function SuratTugasKegModal({isOpen, onOpenChange, employee}: Sur
         <Image
           alt={'title'}
           className="object-cover"
-          height={1000}
           src={'/header-alternatif.png'}
-          width={800}
         />
       </div>
     </PopoverContent>
